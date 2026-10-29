@@ -1,0 +1,16 @@
+package com.example.salarygrows;
+import android.app.*;import android.os.*;import android.content.*;import android.graphics.Color;import android.view.*;import android.widget.*;import android.text.InputType;import java.time.*;import java.text.*;import java.util.*;
+public class MainActivity extends Activity {
+ SharedPreferences prefs; EditText gross,net,payday; Switch netMode; TextView preview; Handler handler=new Handler(); Runnable ticker;
+ int dp(int v){return (int)(v*getResources().getDisplayMetrics().density);} TextView text(String s,int size){TextView t=new TextView(this);t.setText(s);t.setTextColor(Color.WHITE);t.setTextSize(size);return t;}
+ void add(LinearLayout l,View v){LinearLayout.LayoutParams a=new LinearLayout.LayoutParams(-1,-2);a.bottomMargin=dp(14);l.addView(v,a);} EditText field(long n){EditText e=new EditText(this);e.setText(String.valueOf(n));e.setTextColor(Color.WHITE);e.setInputType(InputType.TYPE_CLASS_NUMBER);e.setSingleLine(true);return e;}
+ @Override public void onCreate(Bundle b){super.onCreate(b);prefs=getSharedPreferences("salary",MODE_PRIVATE);ScrollView scroll=new ScrollView(this);scroll.setBackgroundColor(0xff101827);LinearLayout l=new LinearLayout(this);l.setOrientation(1);l.setPadding(dp(24),dp(35),dp(24),dp(24));scroll.addView(l);setContentView(scroll);
+ add(l,text("월급이 자란다",28));add(l,text("매월 1일~말일 · 24시간 균등 적립",14));preview=text("",25);add(l,preview);
+ add(l,text("세전 월급 (원)",16));gross=field(prefs.getLong("gross",2800000));add(l,gross);add(l,text("세후 실수령액 (원)",16));net=field(prefs.getLong("net",2500000));add(l,net);add(l,text("월급날 (1~31)",16));payday=field(prefs.getInt("payday",10));add(l,payday);
+ netMode=new Switch(this);netMode.setText("위젯 세후 표시 (끄면 세전)");netMode.setTextColor(Color.WHITE);netMode.setChecked(prefs.getBoolean("net_mode",true));add(l,netMode);
+ Button save=new Button(this);save.setText("설정 저장 / 위젯 갱신");add(l,save);add(l,text("홈 화면 길게 누르기 → 위젯 → 월급이 자란다. 위젯을 누르면 설정 화면이 열려.",13));
+ save.setOnClickListener(v->{try{long g=Long.parseLong(gross.getText().toString()),n=Long.parseLong(net.getText().toString());int d=Integer.parseInt(payday.getText().toString());if(g<0||n<0||d<1||d>31)throw new Exception();prefs.edit().putLong("gross",g).putLong("net",n).putInt("payday",d).putBoolean("net_mode",netMode.isChecked()).apply();SalaryWidget.refresh(this);Toast.makeText(this,"저장 완료",Toast.LENGTH_SHORT).show();}catch(Exception e){Toast.makeText(this,"입력값을 확인해",Toast.LENGTH_LONG).show();}});
+ ticker=new Runnable(){public void run(){boolean isNet=prefs.getBoolean("net_mode",true);long target=prefs.getLong(isNet?"net":"gross",isNet?2500000:2800000);LocalDateTime now=LocalDateTime.now();int days=YearMonth.from(now).lengthOfMonth();double f=((now.getDayOfMonth()-1)*86400d+now.getHour()*3600d+now.getMinute()*60d+now.getSecond())/(days*86400d);preview.setText((isNet?"세후 ":"세전 ")+NumberFormat.getIntegerInstance(Locale.KOREA).format((long)(target*f))+"원\n"+String.format(Locale.KOREA,"%.2f%% 달성",f*100));handler.postDelayed(this,1000);}};handler.post(ticker);
+ }
+ @Override protected void onDestroy(){handler.removeCallbacks(ticker);super.onDestroy();}
+}
