@@ -3,11 +3,10 @@
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
         </activity>
-        <receiver android:name=".SalaryWidget" android:exported="true">
-            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter>
-            <meta-data android:name="android.appwidget.provider" android:resource="@xml/salary_widget_info"/>
-        </receiver>
-        <receiver android:name=".SalaryWidget$Mini" android:exported="true"><intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter><meta-data android:name="android.appwidget.provider" android:resource="@xml/salary_widget_mini_info"/></receiver>
+        <receiver android:name=".SalaryWidget$Mini" android:exported="true"><intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/><action android:name="android.intent.action.TIME_SET"/><action android:name="android.intent.action.TIMEZONE_CHANGED"/></intent-filter><meta-data android:name="android.appwidget.provider" android:resource="@xml/salary_widget_mini_info"/></receiver>
         <receiver android:name=".SalaryWidget$Wide" android:exported="true"><intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter><meta-data android:name="android.appwidget.provider" android:resource="@xml/salary_widget_wide_info"/></receiver>
+        <receiver android:name=".SalaryWidget$Three" android:exported="true"><intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter><meta-data android:name="android.appwidget.provider" android:resource="@xml/salary_widget_three_info"/></receiver>
+        <receiver android:name=".SalaryWidget$Four" android:exported="true"><intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter><meta-data android:name="android.appwidget.provider" android:resource="@xml/salary_widget_four_info"/></receiver>
+        <receiver android:name=".SalaryWidget$Five" android:exported="true"><intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter><meta-data android:name="android.appwidget.provider" android:resource="@xml/salary_widget_five_info"/></receiver>
     </application>
 </manifest>
