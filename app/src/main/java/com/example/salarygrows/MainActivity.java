@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
  section(l,"월급날 설정");
  ddayOn=new CheckBox(this);ddayOn.setText("앱 메인 화면에 D-day 표시");ddayOn.setTextColor(SOFT_TEXT);ddayOn.setChecked(prefs.getBoolean("dday_on",false));add(l,ddayOn);
  holidayRule=spinner(new String[]{"설정한 날짜 그대로","직전 평일","다음 평일"},prefs.getInt("holiday_rule",0));row(l,"주말 지급일",holidayRule);
- ddayWidgetOn=new CheckBox(this);ddayWidgetOn.setText("위젯에 D-day 표시");ddayWidgetOn.setTextColor(SOFT_TEXT);ddayWidgetOn.setChecked(prefs.getBoolean("dday_widget_on",false));add(l,ddayWidgetOn);ddayWidgetOn.setOnCheckedChangeListener((b,checked)->{prefs.edit().putBoolean("dday_widget_on",checked).apply();SalaryWidget.refresh(this);});ddayOn.setOnCheckedChangeListener((b,checked)->prefs.edit().putBoolean("dday_on",checked).apply());
+ ddayWidgetOn=new CheckBox(this);ddayWidgetOn.setText("위젯에 D-day 표시");ddayWidgetOn.setTextColor(SOFT_TEXT);ddayWidgetOn.setChecked(prefs.getBoolean("dday_widget_on",false));add(l,ddayWidgetOn);ddayWidgetOn.setOnCheckedChangeListener((buttonView,checked)->{prefs.edit().putBoolean("dday_widget_on",checked).apply();SalaryWidget.refresh(this);});ddayOn.setOnCheckedChangeListener((buttonView,checked)->prefs.edit().putBoolean("dday_on",checked).apply());
  ddayText=text("",14);add(l,ddayText);
  section(l,"알림 설정");
  notifyPay=new CheckBox(this);notifyPay.setText("월급날 알림 (오전 9시)");notifyPay.setTextColor(SOFT_TEXT);notifyPay.setChecked(false);add(l,notifyPay);
