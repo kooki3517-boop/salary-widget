@@ -78,9 +78,74 @@ public class MainActivity extends Activity {
  Button export=new Button(this);export.setText("설정 파일 내보내기");export.setAllCaps(false);add(l,export);export.setOnClickListener(v->{Intent i=new Intent(Intent.ACTION_CREATE_DOCUMENT);i.setType("application/json");i.addCategory(Intent.CATEGORY_OPENABLE);i.putExtra(Intent.EXTRA_TITLE,"salary-settings.json");startActivityForResult(i,BACKUP_CREATE);});
  Button restore=new Button(this);restore.setText("설정 파일 불러오기");restore.setAllCaps(false);add(l,restore);restore.setOnClickListener(v->{Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);i.setType("application/json");i.addCategory(Intent.CATEGORY_OPENABLE);startActivityForResult(i,BACKUP_OPEN);});
  View footLine=new View(this);footLine.setBackgroundColor(LINE);LinearLayout.LayoutParams flp=new LinearLayout.LayoutParams(-1,dp(1));flp.topMargin=dp(20);flp.bottomMargin=dp(12);l.addView(footLine,flp);
- LinearLayout footer=new LinearLayout(this);footer.setGravity(Gravity.CENTER);String[] footerLabels={"✉ 의견 보내기","☕ 개발자 응원하기","개인정보처리방침"};for(int k=0;k<3;k++){final int index=k;TextView link=text(footerLabels[k],11);link.setPadding(dp(4),dp(8),dp(4),dp(8));link.setOnClickListener(v->footerAction(index));footer.addView(link);}add(l,footer);TextView version=text("월급이 자란다 💵 · v2.12",10);version.setGravity(Gravity.CENTER);version.setTextColor(0xffA8B8CE);add(l,version);
+ LinearLayout footer=new LinearLayout(this);footer.setGravity(Gravity.CENTER);String[] footerLabels={"✉ 의견 보내기","☕ 개발자 응원하기","개인정보처리방침"};for(int k=0;k<3;k++){final int index=k;TextView link=text(footerLabels[k],11);link.setPadding(dp(4),dp(8),dp(4),dp(8));link.setOnClickListener(v->footerAction(index));footer.addView(link);}add(l,footer);TextView version=text("월급이 자란다 💵 · v2.15",10);version.setGravity(Gravity.CENTER);version.setTextColor(0xffA8B8CE);add(l,version);
+ organizeSettings(l,scroll);
  ticker=new Runnable(){public void run(){int mode=prefs.getInt("display_mode",0);long target=mode==2?prefs.getLong("net_salary_amount",prefs.getLong("net",2200000)):prefs.getLong("salary_amount",prefs.getLong("net",2500000));LocalDateTime now=LocalDateTime.now();int days=YearMonth.from(now).lengthOfMonth();double f=SalaryFeatures.fraction(prefs,now);periodText.setText(now.getMonthValue()+"월 · "+(prefs.getInt("accrual_type",0)==1?"근무시간 기준 적립":"24시간 균등 적립")+" · 매월 1일~말일");if(ddayText!=null)ddayText.setText(ddayOn.isChecked()?SalaryFeatures.dday(prefs,now.toLocalDate()):"");preview.setText(NumberFormat.getIntegerInstance(Locale.KOREA).format((long)(target*f))+"원");previewPercent.setText(String.format(Locale.KOREA,"%.2f%%",f*100));progressStyle(now.getDayOfMonth()>=days-4);appProgress.setProgress((int)Math.round(f*10000));if(widgetPreview!=null&&now.getSecond()%5==0)updateWidgetPreview();handler.postDelayed(this,1000);}};handler.post(ticker);
  }
+
+ // Existing controls are moved into dedicated settings pages without recreating their state.
+ void organizeSettings(LinearLayout root,ScrollView scroll){
+  ArrayList<View> original=new ArrayList<>();for(int i=0;i<root.getChildCount();i++)original.add(root.getChildAt(i));
+  root.removeAllViews();
+  LinearLayout[] pages=new LinearLayout[5];for(int i=0;i<5;i++){pages[i]=new LinearLayout(this);pages[i].setOrientation(LinearLayout.VERTICAL);}
+  // 0 dashboard, 1 salary, 2 widget, 3 notifications, 4 other
+  int category=0;String sectionName="";
+  LinearLayout monthlyGroup=new LinearLayout(this),hourlyGroup=new LinearLayout(this),annualGroup=new LinearLayout(this),scheduleGroup=new LinearLayout(this);
+  for(LinearLayout g:new LinearLayout[]{monthlyGroup,hourlyGroup,annualGroup,scheduleGroup})g.setOrientation(LinearLayout.VERTICAL);
+  for(View v:original){
+   if(v instanceof TextView && !(v instanceof Button)){
+    String txt=((TextView)v).getText().toString();
+    if(txt.equals("월급 설정")){category=1;sectionName=txt;continue;}
+    if(txt.equals("급여 형태 · 적립 방식")){category=1;sectionName=txt;continue;}
+    if(txt.equals("근무 일정 (근무시간 적립용)")){category=1;sectionName=txt;continue;}
+    if(txt.equals("월급날 D-day")){category=1;sectionName=txt;continue;}
+    if(txt.equals("알림 설정")){category=3;sectionName=txt;continue;}
+    if(txt.equals("위젯 디자인 미리보기")){category=2;sectionName=txt;continue;}
+    if(txt.equals("4대보험 예상 계산")){category=1;sectionName=txt;section(pages[1],txt);continue;}
+    if(txt.equals("설정 백업 및 복원")){category=4;sectionName=txt;continue;}
+   }
+   LinearLayout destination=pages[category];
+   if(category==1 && sectionName.equals("월급 설정")){
+    if(hasChild(v,salary)||hasChild(v,netSalary))destination=monthlyGroup;
+    if(hasChild(v,displayMode)||hasChild(v,backgroundChoice)){destination=pages[2];}
+   }
+   if(category==1 && sectionName.equals("급여 형태 · 적립 방식")){
+    if(hasChild(v,annualSalary))destination=annualGroup;
+    if(hasChild(v,hourlyRate))destination=hourlyGroup;
+   }
+   if(category==1 && sectionName.equals("근무 일정 (근무시간 적립용)"))destination=scheduleGroup;
+   if(category==1 && sectionName.equals("월급날 D-day") && v==ddayOn){destination=pages[0];}
+   if(category==1 && sectionName.equals("월급날 D-day") && v==ddayText){destination=pages[0];}
+   if(category==1 && sectionName.equals("4대보험 예상 계산") && v instanceof Button && ((Button)v).getText().toString().contains("설정 저장")){destination=pages[1];}
+   if(v.getParent() instanceof android.view.ViewGroup)((android.view.ViewGroup)v.getParent()).removeView(v);
+   destination.addView(v,new LinearLayout.LayoutParams(-1,-2));
+  }
+  // Place salary-specific inputs directly below the salary type selector.
+  int payIndex=findChildIndex(pages[1],payType);
+  LinearLayout typeFields=new LinearLayout(this);typeFields.setOrientation(LinearLayout.VERTICAL);
+  typeFields.addView(monthlyGroup);typeFields.addView(hourlyGroup);typeFields.addView(annualGroup);
+  pages[1].addView(typeFields,Math.min(payIndex+1,pages[1].getChildCount()));
+  int accrualIndex=findChildIndex(pages[1],accrualType);
+  pages[1].addView(scheduleGroup,Math.min(accrualIndex+1,pages[1].getChildCount()));
+  Runnable updateVisibility=()->{int type=payType.getSelectedItemPosition();monthlyGroup.setVisibility(type==0?View.VISIBLE:View.GONE);hourlyGroup.setVisibility(type==1?View.VISIBLE:View.GONE);annualGroup.setVisibility(type==2?View.VISIBLE:View.GONE);scheduleGroup.setVisibility(accrualType.getSelectedItemPosition()==1?View.VISIBLE:View.GONE);};
+  payType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){public void onNothingSelected(AdapterView<?> a){}public void onItemSelected(AdapterView<?> a,View v,int pos,long id){updateVisibility.run();}});
+  accrualType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){public void onNothingSelected(AdapterView<?> a){}public void onItemSelected(AdapterView<?> a,View v,int pos,long id){updateVisibility.run();}});
+  updateVisibility.run();
+  // Dashboard remains the default. Settings are navigated as separate pages.
+  LinearLayout navigation=new LinearLayout(this);navigation.setOrientation(LinearLayout.VERTICAL);
+  TextView back=text("‹  월급 현황으로 돌아가기",16);back.setPadding(dp(8),dp(14),dp(8),dp(14));back.setOnClickListener(v->showSettingsPage(pages,navigation,0,scroll));
+  for(int i=0;i<5;i++)root.addView(pages[i],new LinearLayout.LayoutParams(-1,-2));
+  String[] names={"급여 설정","위젯 설정","알림 설정","기타 설정"};
+  for(int i=1;i<=4;i++){final int selected=i;TextView entry=text(names[i-1]+"    ›",17);entry.setTypeface(null,1);entry.setPadding(dp(15),dp(17),dp(15),dp(17));entry.setBackground(roundedBox(FIELD,LINE));LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);lp.bottomMargin=dp(10);navigation.addView(entry,lp);entry.setOnClickListener(v->showSettingsPage(pages,navigation,selected,scroll));}
+  // Keep the summary and its navigation visible on the first page.
+  pages[0].addView(navigation);
+  for(int i=1;i<=4;i++){TextView returnLink=text("‹  월급 현황으로",15);returnLink.setPadding(0,dp(12),0,dp(14));pages[i].addView(returnLink,0);returnLink.setOnClickListener(v->showSettingsPage(pages,navigation,0,scroll));}
+  showSettingsPage(pages,navigation,0,scroll);
+ }
+ boolean hasChild(View parent,View target){if(parent==target)return true;if(parent instanceof android.view.ViewGroup){android.view.ViewGroup g=(android.view.ViewGroup)parent;for(int i=0;i<g.getChildCount();i++)if(hasChild(g.getChildAt(i),target))return true;}return false;}
+ int findChildIndex(LinearLayout page,View child){for(int i=0;i<page.getChildCount();i++)if(hasChild(page.getChildAt(i),child))return i;return page.getChildCount()-1;}
+ void showSettingsPage(LinearLayout[] pages,LinearLayout navigation,int page,ScrollView scroll){for(int i=0;i<pages.length;i++)pages[i].setVisibility(i==page?View.VISIBLE:View.GONE);scroll.post(()->scroll.scrollTo(0,0));}
+
  Spinner spinner(String[] options,int index){Spinner sp=new Spinner(this);ArrayAdapter<String> ad=new ArrayAdapter<>(this,R.layout.spinner_item_soft,options);ad.setDropDownViewResource(R.layout.spinner_dropdown_soft);sp.setAdapter(ad);styleSpinner(sp);sp.setSelection(Math.max(0,Math.min(index,options.length-1)));return sp;}
  EditText plainField(String val){EditText e=new EditText(this);e.setText(val);e.setTextColor(SOFT_TEXT);e.setSingleLine(true);styleField(e);return e;}
  void footerAction(int which){if(which==0){EditText input=new EditText(this);input.setMinLines(3);input.setGravity(Gravity.TOP);new AlertDialog.Builder(this).setTitle("개발자에게 의견 보내기").setView(input).setNegativeButton("취소",null).setPositiveButton("이메일 앱 열기",(d,w)->{Intent mail=new Intent(Intent.ACTION_SENDTO,Uri.parse("mailto:"));mail.putExtra(Intent.EXTRA_SUBJECT,"[월급이 자란다] 사용자 의견");mail.putExtra(Intent.EXTRA_TEXT,input.getText().toString());try{startActivity(mail);}catch(Exception ex){Toast.makeText(this,"이메일 앱이 없습니다",Toast.LENGTH_SHORT).show();}}).show();}else new AlertDialog.Builder(this).setTitle(which==1?"개발자 응원하기":"개인정보처리방침").setMessage(which==1?"후원 계좌가 아직 설정되지 않았습니다. 정식 배포 전에 등록됩니다.":"개인정보처리방침 주소가 아직 설정되지 않았습니다. 정식 배포 전에 등록됩니다.").setPositiveButton("확인",null).show();}
