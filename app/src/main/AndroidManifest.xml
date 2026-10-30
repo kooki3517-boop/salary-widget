@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application android:label="월급이 자란다" android:icon="@mipmap/ic_launcher" android:theme="@android:style/Theme.Material.NoActionBar" android:usesCleartextTraffic="false">
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/><application android:label="월급이 자란다" android:icon="@mipmap/ic_launcher" android:theme="@android:style/Theme.Material.NoActionBar" android:usesCleartextTraffic="false">
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
         </activity>
@@ -8,5 +8,7 @@
         <receiver android:name=".SalaryWidget$Three" android:exported="true"><intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter><meta-data android:name="android.appwidget.provider" android:resource="@xml/salary_widget_three_info"/></receiver>
         <receiver android:name=".SalaryWidget$Four" android:exported="true"><intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter><meta-data android:name="android.appwidget.provider" android:resource="@xml/salary_widget_four_info"/></receiver>
         <receiver android:name=".SalaryWidget$Five" android:exported="true"><intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter><meta-data android:name="android.appwidget.provider" android:resource="@xml/salary_widget_five_info"/></receiver>
+        <receiver android:name=".SalaryWidget$Six" android:exported="true"><intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter><meta-data android:name="android.appwidget.provider" android:resource="@xml/salary_widget_six_info"/></receiver>
+        <receiver android:name=".SalaryNotifications" android:exported="false"/>
     </application>
 </manifest>
