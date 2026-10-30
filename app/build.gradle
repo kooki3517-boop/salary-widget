@@ -1,13 +1,32 @@
 plugins { id 'com.android.application' }
 
 android {
+    // Release signing credentials are supplied by GitHub Actions secrets.
+    signingConfigs {
+        release {
+            if (System.getenv('ANDROID_KEYSTORE_FILE')) {
+                storeFile file(System.getenv('ANDROID_KEYSTORE_FILE'))
+                storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ANDROID_KEY_ALIAS')
+                keyPassword System.getenv('ANDROID_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            if (System.getenv('ANDROID_KEYSTORE_FILE')) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
     namespace 'com.example.salarygrows'
     compileSdk 35
     defaultConfig {
         applicationId 'com.example.salarygrows'
         minSdk 26
         targetSdk 35
-        versionCode 10
-        versionName '2.0'
+        versionCode 12
+        versionName '2.7'
     }
 }
