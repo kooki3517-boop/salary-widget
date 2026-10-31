@@ -1,7 +1,7 @@
 package com.example.salarygrows;
 import android.app.*;import android.os.*;import android.content.*;import android.graphics.Color;import android.graphics.drawable.Drawable;import android.graphics.drawable.GradientDrawable;import android.view.*;import android.widget.*;import android.text.InputType;import android.text.TextWatcher;import android.text.Editable;import java.time.*;import java.time.temporal.*;import android.net.Uri;import java.io.*;import org.json.*;import java.text.*;import java.util.*;
 public class MainActivity extends Activity {
- static final int SOFT_TEXT=0xffF3F6FC; static final int BG=0xff435775; static final int FIELD=0xff344A68; static final int LINE=0xff647793; ProgressBar appProgress; TextView insuranceNetPreview;
+ static final int SOFT_TEXT=0xffF3F6FC; static final int BG=0xff7A91B2; static final int FIELD=0xff435E83; static final int LINE=0xffA4B8D2; ProgressBar appProgress; TextView insuranceNetPreview;
  SharedPreferences prefs; EditText salary,netSalary,payday; Spinner displayMode; RadioGroup backgroundChoice; int clearBackgroundId; TextView preview,previewPercent; Spinner workType; EditText weeklyHours; Switch pensionOn,healthOn,employmentOn; CheckBox applyInsuranceNet; TextView insuranceResult; Spinner themeChoice,previewSize; SeekBar opacityBar; TextView opacityLabel; LinearLayout widgetPreview; Handler handler=new Handler(); Runnable ticker; Spinner payType,accrualType,holidayRule; EditText annualSalary,hourlyRate,startHour,endHour,breakMinutes; CheckBox[] workDays; CheckBox ddayOn,ddayWidgetOn,notifyPay,notifyProgress; TextView ddayText,periodText; static final int BACKUP_CREATE=41,BACKUP_OPEN=42;
  int dp(int v){return (int)(v*getResources().getDisplayMetrics().density);} TextView text(String s,int size){TextView t=new TextView(this);t.setText(s);t.setTextColor(SOFT_TEXT);t.setTextSize(size);return t;}
  void add(LinearLayout l,View v){LinearLayout.LayoutParams a=new LinearLayout.LayoutParams(-1,-2);a.bottomMargin=dp(14);l.addView(v,a);} EditText field(long n){EditText e=new EditText(this);e.setText(String.valueOf(n));e.setTextColor(SOFT_TEXT);e.setInputType(InputType.TYPE_CLASS_NUMBER);e.setSingleLine(true);styleField(e);return e;}
@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
  hourlyRate=field(prefs.getLong("hourly_rate",11000));commas(hourlyRate);row(l,"시급",hourlyRate);
  accrualType=spinner(new String[]{"24시간 균등 적립","근무시간 기준 적립"},prefs.getInt("accrual_type",0));row(l,"적립 방식",accrualType);
  section(l,"근무 일정 (근무시간 적립용)");
- LinearLayout daysRow=new LinearLayout(this);daysRow.setOrientation(LinearLayout.HORIZONTAL);workDays=new CheckBox[7];String[] dn={"월","화","수","목","금","토","일"};for(int k=0;k<7;k++){final int ix=k;CheckBox cb=new CheckBox(this);cb.setText(dn[k]);cb.setTextSize(11);cb.setTextColor(SOFT_TEXT);cb.setButtonTintList(android.content.res.ColorStateList.valueOf(0xffA7DEC7));cb.setChecked(prefs.getBoolean("day_"+k,k<5));workDays[k]=cb;daysRow.addView(cb,new LinearLayout.LayoutParams(0,-2,1));}add(l,daysRow);
+ LinearLayout daysRow=new LinearLayout(this);daysRow.setOrientation(LinearLayout.HORIZONTAL);workDays=new CheckBox[7];String[] dn={"월","화","수","목","금","토","일"};for(int k=0;k<7;k++){final int ix=k;CheckBox cb=new CheckBox(this);cb.setText(dn[k]);cb.setTextSize(11);cb.setTextColor(SOFT_TEXT);cb.setButtonTintList(android.content.res.ColorStateList.valueOf(0xff617D73));cb.setChecked(prefs.getBoolean("day_"+k,k<5));workDays[k]=cb;daysRow.addView(cb,new LinearLayout.LayoutParams(0,-2,1));}add(l,daysRow);
  startHour=plainField(prefs.getString("start_hour","09:00"));row(l,"출근 (HH:mm)",startHour);
  endHour=plainField(prefs.getString("end_hour","18:00"));row(l,"퇴근 (HH:mm)",endHour);
  breakMinutes=field(prefs.getInt("break_minutes",60));row(l,"휴게시간 (분)",breakMinutes);
@@ -67,13 +67,13 @@ public class MainActivity extends Activity {
  weeklyHours=field(prefs.getInt("weekly_hours",40));row(l,"주당 근로시간",weeklyHours);
  LinearLayout insuranceRow=new LinearLayout(this);insuranceRow.setGravity(Gravity.CENTER_VERTICAL);insuranceRow.setOrientation(LinearLayout.HORIZONTAL);insuranceRow.addView(label("보험 적용"),new LinearLayout.LayoutParams(0,-2,1));pensionOn=new Switch(this);pensionOn.setText("연금");pensionOn.setTextSize(11);pensionOn.setTextColor(SOFT_TEXT);pensionOn.setChecked(prefs.getBoolean("insurance_pension",true));healthOn=new Switch(this);healthOn.setText("건강");healthOn.setTextSize(11);healthOn.setTextColor(SOFT_TEXT);healthOn.setChecked(prefs.getBoolean("insurance_health",true));employmentOn=new Switch(this);employmentOn.setText("고용");employmentOn.setTextSize(11);employmentOn.setTextColor(SOFT_TEXT);employmentOn.setChecked(prefs.getBoolean("insurance_employment",true));
  LinearLayout switches=new LinearLayout(this);switches.setGravity(Gravity.CENTER_VERTICAL);switches.setOrientation(LinearLayout.VERTICAL);switches.addView(pensionOn);switches.addView(healthOn);switches.addView(employmentOn);insuranceRow.addView(switches);add(l,insuranceRow);
- LinearLayout resultCard=new LinearLayout(this);resultCard.setOrientation(LinearLayout.VERTICAL);resultCard.setPadding(dp(12),dp(12),dp(12),dp(12));resultCard.setBackground(roundedBox(0xff344866,0xff344866));insuranceResult=text("",13);resultCard.addView(insuranceResult);LinearLayout resultLine=new LinearLayout(this);resultLine.setGravity(Gravity.CENTER_VERTICAL);resultLine.addView(label("예상 세후 월급"),new LinearLayout.LayoutParams(0,-2,1));insuranceNetPreview=text("",21);insuranceNetPreview.setGravity(Gravity.RIGHT);insuranceNetPreview.setTextColor(0xff00E676);insuranceNetPreview.setTypeface(android.graphics.Typeface.create("sans-serif-black",android.graphics.Typeface.BOLD));resultLine.addView(insuranceNetPreview,new LinearLayout.LayoutParams(0,-2,1.5f));resultCard.addView(resultLine);TextView disclaimer=text("※ 예상 계산 금액으로 실제 지급되는 월급과 차이가 있을 수 있습니다.",11);disclaimer.setPadding(0,dp(9),0,dp(9));resultCard.addView(disclaimer);View separator=new View(this);separator.setBackgroundColor(LINE);resultCard.addView(separator,new LinearLayout.LayoutParams(-1,dp(1)));applyInsuranceNet=new CheckBox(this);applyInsuranceNet.setText("계산 결과를 세후 월급에 반영");applyInsuranceNet.setTextColor(SOFT_TEXT);applyInsuranceNet.setTextSize(13);applyInsuranceNet.setPadding(0,dp(9),0,0);applyInsuranceNet.setChecked(prefs.getBoolean("apply_insurance_net",false));resultCard.addView(applyInsuranceNet);add(l,resultCard);
- Button calculate=new Button(this);calculate.setText("공제 상세 내역 보기 / 재계산");calculate.setTextSize(13);calculate.setAllCaps(false);calculate.setBackground(roundedBox(0xff344866,LINE));calculate.setTextColor(SOFT_TEXT);add(l,calculate);
+ LinearLayout resultCard=new LinearLayout(this);resultCard.setOrientation(LinearLayout.VERTICAL);resultCard.setPadding(dp(12),dp(12),dp(12),dp(12));resultCard.setBackground(roundedBox(FIELD,LINE));insuranceResult=text("",13);resultCard.addView(insuranceResult);LinearLayout resultLine=new LinearLayout(this);resultLine.setGravity(Gravity.CENTER_VERTICAL);resultLine.addView(label("예상 세후 월급"),new LinearLayout.LayoutParams(0,-2,1));insuranceNetPreview=text("",21);insuranceNetPreview.setGravity(Gravity.RIGHT);insuranceNetPreview.setTextColor(0xff00E676);insuranceNetPreview.setTypeface(android.graphics.Typeface.create("sans-serif-black",android.graphics.Typeface.BOLD));resultLine.addView(insuranceNetPreview,new LinearLayout.LayoutParams(0,-2,1.5f));resultCard.addView(resultLine);TextView disclaimer=text("※ 예상 계산 금액으로 실제 지급되는 월급과 차이가 있을 수 있습니다.",11);disclaimer.setPadding(0,dp(9),0,dp(9));resultCard.addView(disclaimer);View separator=new View(this);separator.setBackgroundColor(LINE);resultCard.addView(separator,new LinearLayout.LayoutParams(-1,dp(1)));applyInsuranceNet=new CheckBox(this);applyInsuranceNet.setText("계산 결과를 세후 월급에 반영");applyInsuranceNet.setTextColor(SOFT_TEXT);applyInsuranceNet.setTextSize(13);applyInsuranceNet.setPadding(0,dp(9),0,0);applyInsuranceNet.setChecked(prefs.getBoolean("apply_insurance_net",false));resultCard.addView(applyInsuranceNet);add(l,resultCard);
+ Button calculate=new Button(this);calculate.setText("공제 상세 내역 보기 / 재계산");calculate.setTextSize(13);calculate.setAllCaps(false);calculate.setBackground(roundedBox(FIELD,LINE));calculate.setTextColor(SOFT_TEXT);add(l,calculate);
  TextView detail=text("",12);detail.setVisibility(View.GONE);add(l,detail);
  calculate.setOnClickListener(v->{try{long gross=number(salary);long[] a=InsuranceEstimate.calculate(gross,pensionOn.isChecked(),healthOn.isChecked(),employmentOn.isChecked());long total=a[0]+a[1]+a[2]+a[3];updateInsurancePreview();if(applyInsuranceNet.isChecked())netSalary.setText(NumberFormat.getIntegerInstance(Locale.KOREA).format(Math.max(0,gross-total)));detail.setText("국민연금: "+SalaryCalc.won(a[0])+"\n건강보험: "+SalaryCalc.won(a[1])+"\n장기요양보험: "+SalaryCalc.won(a[2])+"\n고용보험: "+SalaryCalc.won(a[3])+"\n산재보험: 근로자 부담 0원\n\n※ 소득세·지방소득세 제외. 실제 공제액은 개인별 조건에 따라 다릅니다.");detail.setVisibility(detail.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);}catch(Exception ex){Toast.makeText(this,"월급을 확인해",Toast.LENGTH_SHORT).show();}});
  applyInsuranceNet.setOnCheckedChangeListener((button,checked)->{if(checked){try{long gross=number(salary);long[] a=InsuranceEstimate.calculate(gross,pensionOn.isChecked(),healthOn.isChecked(),employmentOn.isChecked());netSalary.setText(NumberFormat.getIntegerInstance(Locale.KOREA).format(Math.max(0,gross-a[0]-a[1]-a[2]-a[3])));}catch(Exception ignored){}}netSalary.setEnabled(!checked);netSalary.setAlpha(checked?0.7f:1f);});netSalary.setEnabled(!applyInsuranceNet.isChecked());netSalary.setAlpha(applyInsuranceNet.isChecked()?0.7f:1f);
  for(Switch sw:new Switch[]{pensionOn,healthOn,employmentOn})sw.setOnCheckedChangeListener((v,checked)->updateInsurancePreview());salary.addTextChangedListener(new TextWatcher(){public void beforeTextChanged(CharSequence s,int a,int c,int f){}public void onTextChanged(CharSequence s,int a,int b,int c){updateInsurancePreview();}public void afterTextChanged(Editable e){}});updateInsurancePreview();
- Button save=new Button(this);save.setText("설정 저장 / 위젯 갱신");save.setBackground(roundedBox(0xffA7DEC7,0xffA7DEC7));save.setTextColor(0xff183B30);save.setAllCaps(false);save.setTypeface(null,1);save.setMinHeight(dp(52));add(l,save);
+ Button save=new Button(this);save.setText("설정 저장 / 위젯 갱신");save.setBackground(roundedBox(0xff617D73,0xff617D73));save.setTextColor(0xffFFFFFF);save.setAllCaps(false);save.setTypeface(null,1);save.setMinHeight(dp(52));add(l,save);
  save.setOnClickListener(v->{try{long g=number(salary);if(payType.getSelectedItemPosition()==2)g=Math.round(number(annualSalary)/12.0);if(payType.getSelectedItemPosition()==1)g=Math.round(number(hourlyRate)*SalaryFeatures.monthWorkHours(prefs,workDays,startHour.getText().toString(),endHour.getText().toString(),Integer.parseInt(breakMinutes.getText().toString())));long netValue=number(netSalary);if(applyInsuranceNet.isChecked()){long[] a=InsuranceEstimate.calculate(g,pensionOn.isChecked(),healthOn.isChecked(),employmentOn.isChecked());netValue=Math.max(0,g-a[0]-a[1]-a[2]-a[3]);netSalary.setText(NumberFormat.getIntegerInstance(Locale.KOREA).format(netValue));}if(netValue<0)throw new Exception();int d=Integer.parseInt(payday.getText().toString());if(g<0||d<1||d>31)throw new Exception();int hours=Integer.parseInt(weeklyHours.getText().toString());if(hours<0||hours>168)throw new Exception();prefs.edit().putInt("work_type",workType.getSelectedItemPosition()).putInt("weekly_hours",hours).putBoolean("insurance_pension",pensionOn.isChecked()).putBoolean("insurance_health",healthOn.isChecked()).putBoolean("insurance_employment",employmentOn.isChecked()).putLong("salary_amount",g).putLong("net_salary_amount",netValue).putBoolean("apply_insurance_net",applyInsuranceNet.isChecked()).putInt("display_mode",displayMode.getSelectedItemPosition()).putInt("payday",d).putBoolean("transparent_bg",backgroundChoice.getCheckedRadioButtonId()==clearBackgroundId).putInt("widget_theme",themeChoice.getSelectedItemPosition()).putInt("widget_opacity",opacityBar.getProgress()).apply();prefs.edit().putInt("pay_type",payType.getSelectedItemPosition()).putInt("accrual_type",accrualType.getSelectedItemPosition()).putLong("annual_salary",number(annualSalary)).putLong("hourly_rate",number(hourlyRate)).putString("start_hour",startHour.getText().toString()).putString("end_hour",endHour.getText().toString()).putInt("break_minutes",Integer.parseInt(breakMinutes.getText().toString())).putBoolean("dday_on",ddayOn.isChecked()).putBoolean("dday_widget_on",ddayWidgetOn.isChecked()).putInt("holiday_rule",holidayRule.getSelectedItemPosition()).putBoolean("notify_pay",false).putBoolean("notify_progress",false).apply();for(int k=0;k<7;k++)prefs.edit().putBoolean("day_"+k,workDays[k].isChecked()).apply();SalaryWidget.refresh(this);Toast.makeText(this,"저장 완료",Toast.LENGTH_SHORT).show();}catch(Exception e){Toast.makeText(this,"입력값을 확인해",Toast.LENGTH_LONG).show();}});
  section(l,"설정 백업 및 복원");
  Button export=new Button(this);export.setText("설정 파일 내보내기");export.setAllCaps(false);add(l,export);export.setOnClickListener(v->{Intent i=new Intent(Intent.ACTION_CREATE_DOCUMENT);i.setType("application/json");i.addCategory(Intent.CATEGORY_OPENABLE);i.putExtra(Intent.EXTRA_TITLE,"salary-settings.json");startActivityForResult(i,BACKUP_CREATE);});
@@ -100,12 +100,19 @@ public class MainActivity extends Activity {
   main.addView(heading,new LinearLayout.LayoutParams(-1,-2));
   TextView back=text("‹  월급 화면으로 돌아가기",15);back.setPadding(dp(4),dp(14),0,dp(14));settings.addView(back);
   LinearLayout tabs=new LinearLayout(this);tabs.setOrientation(LinearLayout.HORIZONTAL);
-  TextView widgetTab=text("위젯 설정",15);widgetTab.setGravity(Gravity.CENTER);widgetTab.setPadding(dp(6),dp(13),dp(6),dp(13));
-  TextView paydayTab=text("월급날 설정",15);paydayTab.setGravity(Gravity.CENTER);paydayTab.setPadding(dp(6),dp(13),dp(6),dp(13));
-  tabs.addView(widgetTab,new LinearLayout.LayoutParams(0,-2,1));tabs.addView(paydayTab,new LinearLayout.LayoutParams(0,-2,1));settings.addView(tabs);
+  TextView widgetTab=text("▣  위젯 설정",15);widgetTab.setGravity(Gravity.CENTER);widgetTab.setTypeface(null,1);widgetTab.setPadding(dp(8),dp(15),dp(8),dp(15));
+  TextView paydayTab=text("▦  월급날 설정",15);paydayTab.setGravity(Gravity.CENTER);paydayTab.setPadding(dp(8),dp(15),dp(8),dp(15));
+  LinearLayout.LayoutParams leftTab=new LinearLayout.LayoutParams(0,dp(54),1);leftTab.rightMargin=dp(6);
+  LinearLayout.LayoutParams rightTab=new LinearLayout.LayoutParams(0,dp(54),1);rightTab.leftMargin=dp(6);
+  tabs.addView(widgetTab,leftTab);tabs.addView(paydayTab,rightTab);
+  LinearLayout.LayoutParams tabParams=new LinearLayout.LayoutParams(-1,-2);tabParams.bottomMargin=dp(18);settings.addView(tabs,tabParams);
   settings.addView(widgetPage);settings.addView(paydayPage);
-  Runnable showWidget=()->{widgetPage.setVisibility(View.VISIBLE);paydayPage.setVisibility(View.GONE);widgetTab.setBackground(roundedBox(FIELD,LINE));paydayTab.setBackgroundColor(Color.TRANSPARENT);};
-  Runnable showPayday=()->{widgetPage.setVisibility(View.GONE);paydayPage.setVisibility(View.VISIBLE);paydayTab.setBackground(roundedBox(FIELD,LINE));widgetTab.setBackgroundColor(Color.TRANSPARENT);};
+  Runnable showWidget=()->{widgetPage.setVisibility(View.VISIBLE);paydayPage.setVisibility(View.GONE);
+   widgetTab.setBackground(roundedBox(0xff5C79A0,0xffD8E6F5));paydayTab.setBackground(roundedBox(FIELD,LINE));
+   widgetTab.setTypeface(null,1);paydayTab.setTypeface(null,0);};
+  Runnable showPayday=()->{widgetPage.setVisibility(View.GONE);paydayPage.setVisibility(View.VISIBLE);
+   paydayTab.setBackground(roundedBox(0xff5C79A0,0xffD8E6F5));widgetTab.setBackground(roundedBox(FIELD,LINE));
+   paydayTab.setTypeface(null,1);widgetTab.setTypeface(null,0);};
   showWidget.run();
   widgetTab.setOnClickListener(v->showWidget.run());paydayTab.setOnClickListener(v->showPayday.run());
   gear.setOnClickListener(v->{main.setVisibility(View.GONE);settings.setVisibility(View.VISIBLE);scroll.post(()->scroll.scrollTo(0,0));});
@@ -128,6 +135,10 @@ public class MainActivity extends Activity {
    LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);lp.bottomMargin=dp(10);destination.addView(v,lp);
   }
   for(LinearLayout page:new LinearLayout[]{main,widgetPage,paydayPage})normalizeForm(page);
+  // Uniform full-width settings cards with stacked labels and controls.
+  styleSettingsCards(widgetPage,false);
+  styleSettingsCards(paydayPage,true);
+
   themeChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){public void onNothingSelected(AdapterView<?> a){}public void onItemSelected(AdapterView<?> a,View v,int pos,long id){prefs.edit().putInt("widget_theme",pos).apply();updateWidgetPreview();SalaryWidget.refresh(MainActivity.this);}});
   displayMode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){public void onNothingSelected(AdapterView<?> a){}public void onItemSelected(AdapterView<?> a,View v,int pos,long id){prefs.edit().putInt("display_mode",pos).apply();SalaryWidget.refresh(MainActivity.this);}});
   opacityBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){public void onStartTrackingTouch(SeekBar b){}public void onStopTrackingTouch(SeekBar b){}public void onProgressChanged(SeekBar b,int value,boolean user){opacityLabel.setText("배경 불투명도 "+value+"%");if(user){prefs.edit().putInt("widget_opacity",value).apply();SalaryWidget.refresh(MainActivity.this);}updateWidgetPreview();}});
@@ -149,6 +160,50 @@ public class MainActivity extends Activity {
   accrualType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){public void onNothingSelected(AdapterView<?> a){}public void onItemSelected(AdapterView<?> a,View v,int pos,long id){visibility.run();}});
   visibility.run();
   root.addView(main,new LinearLayout.LayoutParams(-1,-2));root.addView(settings,new LinearLayout.LayoutParams(-1,-2));settings.setVisibility(View.GONE);
+ }
+ LinearLayout newSettingsCard(){
+  LinearLayout card=new LinearLayout(this);card.setOrientation(LinearLayout.VERTICAL);
+  card.setPadding(dp(15),dp(15),dp(15),dp(15));card.setBackground(roundedBox(FIELD,LINE));
+  return card;
+ }
+ void styleSettingsCards(LinearLayout page,boolean payday){
+  ArrayList<View> elements=new ArrayList<>();
+  for(int i=0;i<page.getChildCount();i++)elements.add(page.getChildAt(i));
+  page.removeAllViews();
+  LinearLayout card=newSettingsCard();int cardIndex=0;
+  for(View element:elements){
+   if(element.getParent() instanceof ViewGroup)((ViewGroup)element.getParent()).removeView(element);
+   boolean isHeader=element instanceof TextView&&!(element instanceof Button)&&
+    (((TextView)element).getText().toString().equals("위젯 디자인 미리보기")||
+     ((TextView)element).getText().toString().equals("월급날 설정"));
+   boolean preview=hasChild(element,widgetPreview);
+   boolean holiday=hasChild(element,holidayRule);
+   if(isHeader){continue;}
+   if((!payday&&preview)||(payday&&holiday)){
+    if(card.getChildCount()>0)addSettingsCard(page,card);
+    card=newSettingsCard();cardIndex++;
+    TextView header=text(payday?"주말 지급일":"위젯 미리보기",16);
+    header.setTypeface(null,1);card.addView(header);
+   }
+   if(element instanceof LinearLayout&&((LinearLayout)element).getOrientation()==LinearLayout.HORIZONTAL&&
+     ((LinearLayout)element).getChildCount()==2&&
+     ((LinearLayout)element).getChildAt(0) instanceof TextView){
+    LinearLayout r=(LinearLayout)element;
+    r.setOrientation(LinearLayout.VERTICAL);
+    View labelView=r.getChildAt(0),control=r.getChildAt(1);
+    LinearLayout.LayoutParams labelParams=new LinearLayout.LayoutParams(-1,dp(32));
+    LinearLayout.LayoutParams controlParams=new LinearLayout.LayoutParams(-1,-2);
+    control.setMinimumHeight(dp(48));
+    labelView.setLayoutParams(labelParams);control.setLayoutParams(controlParams);
+   }
+   LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);lp.bottomMargin=dp(13);
+   card.addView(element,lp);
+  }
+  if(card.getChildCount()>0)addSettingsCard(page,card);
+ }
+ void addSettingsCard(LinearLayout page,LinearLayout card){
+  LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);
+  lp.bottomMargin=dp(14);page.addView(card,lp);
  }
  View parentRow(LinearLayout root,View target){for(int i=0;i<root.getChildCount();i++){View v=root.getChildAt(i);if(hasChild(v,target))return v;}return null;}
  View findText(LinearLayout root,String value){for(int i=0;i<root.getChildCount();i++){View v=root.getChildAt(i);if(v instanceof TextView&&((TextView)v).getText().toString().equals(value))return v;}return null;}
