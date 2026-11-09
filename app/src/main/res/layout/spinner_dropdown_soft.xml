@@ -2,4 +2,4 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
  android:id="@android:id/text1" android:layout_width="match_parent" android:layout_height="wrap_content"
  android:padding="14dp" android:background="#1B2535"
- android:textColor="#244F46" android:textSize="16sp"/>
+ android:textColor="#FFFFFF" android:textSize="16sp"/>
