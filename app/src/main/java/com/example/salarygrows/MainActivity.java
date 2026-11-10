@@ -74,11 +74,15 @@ public class MainActivity extends Activity {
  annualSalary=field(prefs.getLong("annual_salary",34560000));commas(annualSalary);row(l,"세전 연봉",annualSalary);
  hourlyRate=field(prefs.getLong("hourly_rate",11000));commas(hourlyRate);row(l,"시급",hourlyRate);
  periodStartDay=prefs.getInt("period_start_day",1);periodEndDay=prefs.getInt("period_end_day",0);
- TextView periodLabel=text("급여 산정 기간",14);add(l,periodLabel);
- LinearLayout periodRow=new LinearLayout(this);periodRow.setOrientation(LinearLayout.HORIZONTAL);
+ // Match the app-wide label-to-field proportions (0.95 : 1.65).
+ LinearLayout periodRow=new LinearLayout(this);periodRow.setOrientation(LinearLayout.HORIZONTAL);periodRow.setGravity(Gravity.CENTER_VERTICAL);
+ TextView periodLabel=label("급여 산정 기간");periodRow.addView(periodLabel,new LinearLayout.LayoutParams(0,dp(44),.95f));
+ LinearLayout periodControls=new LinearLayout(this);periodControls.setOrientation(LinearLayout.VERTICAL);
+ periodRow.addView(periodControls,new LinearLayout.LayoutParams(0,-2,1.65f));
  periodStartButton=text("",15);periodEndButton=text("",15);
- for(TextView t:new TextView[]{periodStartButton,periodEndButton}){t.setGravity(Gravity.CENTER);t.setBackground(roundedBox(FIELD,LINE));t.setPadding(dp(8),dp(14),dp(8),dp(14));LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,-2,1);lp.rightMargin=dp(7);periodRow.addView(t,lp);}
- add(l,periodRow);updatePeriodButtons();periodStartButton.setOnClickListener(v->pickPeriodDay(true));periodEndButton.setOnClickListener(v->pickPeriodDay(false));
+ for(int i=0;i<2;i++){TextView t=i==0?periodStartButton:periodEndButton;t.setGravity(Gravity.CENTER_VERTICAL);t.setBackground(roundedBox(FIELD,LINE));t.setPadding(dp(16),dp(14),dp(12),dp(14));LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);if(i==0)lp.bottomMargin=dp(8);periodControls.addView(t,lp);}
+ LinearLayout.LayoutParams periodLp=new LinearLayout.LayoutParams(-1,-2);periodLp.bottomMargin=dp(8);l.addView(periodRow,periodLp);
+ updatePeriodButtons();periodStartButton.setOnClickListener(v->pickPeriodDay(true));periodEndButton.setOnClickListener(v->pickPeriodDay(false));
  payType.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener(){public void onNothingSelected(android.widget.AdapterView<?> a){}public void onItemSelected(android.widget.AdapterView<?> a,View v,int pos,long id){annualSalary.setVisibility(pos==2?View.VISIBLE:View.GONE);hourlyRate.setVisibility(pos==1?View.VISIBLE:View.GONE);}});
  section(l,"월급날 설정");
  ddayOn=new CheckBox(this);ddayOn.setText("앱 메인 화면에 D-day 표시");ddayOn.setTextColor(SOFT_TEXT);ddayOn.setChecked(prefs.getBoolean("dday_on",false));add(l,ddayOn);
@@ -114,7 +118,7 @@ public class MainActivity extends Activity {
  Button export=new Button(this);export.setText("설정 파일 내보내기");export.setAllCaps(false);add(l,export);export.setOnClickListener(v->{Intent i=new Intent(Intent.ACTION_CREATE_DOCUMENT);i.setType("application/json");i.addCategory(Intent.CATEGORY_OPENABLE);i.putExtra(Intent.EXTRA_TITLE,"salary-settings.json");startActivityForResult(i,BACKUP_CREATE);});
  Button restore=new Button(this);restore.setText("설정 파일 불러오기");restore.setAllCaps(false);add(l,restore);restore.setOnClickListener(v->{Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);i.setType("application/json");i.addCategory(Intent.CATEGORY_OPENABLE);startActivityForResult(i,BACKUP_OPEN);});
  View footLine=new View(this);footLine.setBackgroundColor(LINE);LinearLayout.LayoutParams flp=new LinearLayout.LayoutParams(-1,dp(1));flp.topMargin=dp(20);flp.bottomMargin=dp(12);l.addView(footLine,flp);
- LinearLayout footer=new LinearLayout(this);footer.setGravity(Gravity.CENTER);String[] footerLabels={"✉ 의견 보내기","☕ 개발자 응원하기","개인정보처리방침"};for(int k=0;k<3;k++){final int index=k;TextView link=text(footerLabels[k],11);link.setPadding(dp(4),dp(8),dp(4),dp(8));link.setOnClickListener(v->footerAction(index));footer.addView(link);}add(l,footer);TextView version=text("월급이 자란다 💵 · v2.30",10);version.setGravity(Gravity.CENTER);version.setTextColor(0xff70D9A4);add(l,version);
+ LinearLayout footer=new LinearLayout(this);footer.setGravity(Gravity.CENTER);String[] footerLabels={"✉ 의견 보내기","☕ 개발자 응원하기","개인정보처리방침"};for(int k=0;k<3;k++){final int index=k;TextView link=text(footerLabels[k],11);link.setPadding(dp(4),dp(8),dp(4),dp(8));link.setOnClickListener(v->footerAction(index));footer.addView(link);}add(l,footer);TextView version=text("월급이 자란다 💵 · v2.31",10);version.setGravity(Gravity.CENTER);version.setTextColor(0xff70D9A4);add(l,version);
  organizeSettings(l,scroll);
  ticker=new Runnable(){public void run(){int mode=prefs.getInt("display_mode",0);long target=mode==2?prefs.getLong("net_salary_amount",prefs.getLong("net",2200000)):prefs.getLong("salary_amount",prefs.getLong("net",2500000));LocalDateTime now=LocalDateTime.now();int days=YearMonth.from(now).lengthOfMonth();double f=SalaryFeatures.fraction(prefs,now);periodText.setText(SalaryFeatures.periodLabel(prefs,now.toLocalDate()));if(ddayText!=null){ddayText.setText(ddayOn.isChecked()?SalaryFeatures.dday(prefs,now.toLocalDate()):"");ddayText.setVisibility(ddayOn.isChecked()?View.VISIBLE:View.GONE);}preview.setText(NumberFormat.getIntegerInstance(Locale.KOREA).format((long)(target*f))+"원");boolean rainbow=SalaryFeatures.isPeriodEnd(prefs,now.toLocalDate());preview.getPaint().setShader(rainbow?new android.graphics.LinearGradient(0,0,Math.max(dp(240),preview.getWidth()),0,new int[]{0xffff4545,0xffff9e3c,0xffffe34d,0xff55d66d,0xff52a6ff,0xff6a65d9,0xffc36fe9},null,android.graphics.Shader.TileMode.CLAMP):null);preview.invalidate();previewPercent.setText(String.format(Locale.KOREA,"%.2f%%",f*100));progressStyle(SalaryFeatures.daysUntilPeriodEnd(prefs,now.toLocalDate())<=4);appProgress.setProgress((int)Math.round(f*10000));if(widgetPreview!=null&&now.getSecond()%5==0)updateWidgetPreview();handler.postDelayed(this,1000);}};handler.post(ticker);
  }
@@ -197,7 +201,7 @@ public class MainActivity extends Activity {
    // Separate salary inputs from the insurance category with a subtle 1dp rule.
    sectionDividerBefore(main,insuranceHeading,24,12);
    // The salary subpage uses the same rule between pay amount and pay period.
-   View salaryPeriod=findText(salaryPage,"급여 산정 기간");
+   View salaryPeriod=parentRowDeep(salaryPage,periodStartButton);
    sectionDividerBefore(salaryPage,salaryPeriod,18,14);
    // Keep controls visibly distinct without adding extra cards.
    setBottomGap(salaryPage,parentRowDeep(salaryPage,payType),12);
