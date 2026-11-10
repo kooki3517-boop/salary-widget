@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
   }catch(Exception e){return 0;}
  }
  void updateHourlyEstimate(){
-  if(hourlyEstimate!=null){try{hourlyEstimate.setText("이번 급여 산정 기간 예상 기본급  "+SalaryCalc.won(effectiveGross()));}catch(Exception ignored){}}
+  if(hourlyEstimate!=null){try{hourlyEstimate.setText("이번 달 월급 예상 기본급  "+SalaryCalc.won(effectiveGross()));}catch(Exception ignored){}}
   updateInsurancePreview();
  }
  @Override public void onCreate(Bundle b){super.onCreate(b);prefs=getSharedPreferences("salary",MODE_PRIVATE);ScrollView scroll=new ScrollView(this);scroll.setBackgroundColor(BG);LinearLayout l=new LinearLayout(this);l.setOrientation(1);l.setPadding(dp(18),dp(48),dp(18),dp(20));scroll.addView(l);setContentView(scroll);
