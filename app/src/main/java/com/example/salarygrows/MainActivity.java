@@ -15,6 +15,21 @@ public class MainActivity extends Activity {
  TextView label(String s){TextView t=text(s,14);t.setTextColor(SOFT_TEXT);t.setGravity(Gravity.CENTER_VERTICAL);return t;}
  void row(LinearLayout parent,String name,View control){LinearLayout r=new LinearLayout(this);r.setGravity(Gravity.CENTER_VERTICAL);r.setOrientation(LinearLayout.HORIZONTAL);TextView title=label(name);r.addView(title,new LinearLayout.LayoutParams(0,dp(44),.95f));r.addView(control,new LinearLayout.LayoutParams(0,-2,1.65f));LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);lp.bottomMargin=dp(8);parent.addView(r,lp);}
  void section(LinearLayout l,String name){TextView t=text(name,16);t.setTypeface(android.graphics.Typeface.DEFAULT,android.graphics.Typeface.BOLD);t.setTextColor(SOFT_TEXT);t.setPadding(0,dp(13),0,dp(8));add(l,t);}
+ void sectionDividerBefore(LinearLayout parent,View anchor,int topSpace,int bottomSpace){
+  if(anchor==null)return;
+  View divider=new View(this);divider.setBackgroundColor(LINE);
+  LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,dp(1));
+  lp.topMargin=dp(topSpace);lp.bottomMargin=dp(bottomSpace);
+  parent.addView(divider,parent.indexOfChild(anchor),lp);
+ }
+ void setBottomGap(LinearLayout parent,View child,int gap){
+  if(child==null)return;
+  ViewGroup.LayoutParams base=child.getLayoutParams();
+  if(base instanceof LinearLayout.LayoutParams){
+   LinearLayout.LayoutParams lp=(LinearLayout.LayoutParams)base;
+   lp.bottomMargin=dp(gap);child.setLayoutParams(lp);
+  }
+ }
  void progressStyle(boolean lastFive){GradientDrawable track=roundedBox(0xff40516A,0xff40516A);GradientDrawable fill=new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,lastFive?new int[]{0xff236B43,0xff70D9A4,0xffF6A3A0,0xffB50016}:new int[]{0xff236B43,0xff70D9A4});fill.setCornerRadius(dp(6));android.graphics.drawable.ClipDrawable clip=new android.graphics.drawable.ClipDrawable(fill,Gravity.LEFT,android.graphics.drawable.ClipDrawable.HORIZONTAL);android.graphics.drawable.LayerDrawable layers=new android.graphics.drawable.LayerDrawable(new android.graphics.drawable.Drawable[]{track,clip});layers.setId(0,android.R.id.background);layers.setId(1,android.R.id.progress);appProgress.setProgressDrawable(layers);}
  void updateInsurancePreview(){try{if(insuranceNetPreview==null||insuranceResult==null)return;long gross=effectiveGross();long[] a=InsuranceEstimate.calculate(gross,pensionOn.isChecked(),healthOn.isChecked(),employmentOn.isChecked());long total=a[0]+a[1]+a[2]+a[3];insuranceNetPreview.setText(SalaryCalc.won(Math.max(0,gross-total)));insuranceResult.setText("예상 공제액  "+SalaryCalc.won(total));if(applyInsuranceNet!=null&&applyInsuranceNet.isChecked()&&netSalary!=null){netSalary.setText(NumberFormat.getIntegerInstance(Locale.KOREA).format(Math.max(0,gross-total)));}}catch(Exception ignored){}}
 
@@ -99,7 +114,7 @@ public class MainActivity extends Activity {
  Button export=new Button(this);export.setText("설정 파일 내보내기");export.setAllCaps(false);add(l,export);export.setOnClickListener(v->{Intent i=new Intent(Intent.ACTION_CREATE_DOCUMENT);i.setType("application/json");i.addCategory(Intent.CATEGORY_OPENABLE);i.putExtra(Intent.EXTRA_TITLE,"salary-settings.json");startActivityForResult(i,BACKUP_CREATE);});
  Button restore=new Button(this);restore.setText("설정 파일 불러오기");restore.setAllCaps(false);add(l,restore);restore.setOnClickListener(v->{Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);i.setType("application/json");i.addCategory(Intent.CATEGORY_OPENABLE);startActivityForResult(i,BACKUP_OPEN);});
  View footLine=new View(this);footLine.setBackgroundColor(LINE);LinearLayout.LayoutParams flp=new LinearLayout.LayoutParams(-1,dp(1));flp.topMargin=dp(20);flp.bottomMargin=dp(12);l.addView(footLine,flp);
- LinearLayout footer=new LinearLayout(this);footer.setGravity(Gravity.CENTER);String[] footerLabels={"✉ 의견 보내기","☕ 개발자 응원하기","개인정보처리방침"};for(int k=0;k<3;k++){final int index=k;TextView link=text(footerLabels[k],11);link.setPadding(dp(4),dp(8),dp(4),dp(8));link.setOnClickListener(v->footerAction(index));footer.addView(link);}add(l,footer);TextView version=text("월급이 자란다 💵 · v2.29",10);version.setGravity(Gravity.CENTER);version.setTextColor(0xff70D9A4);add(l,version);
+ LinearLayout footer=new LinearLayout(this);footer.setGravity(Gravity.CENTER);String[] footerLabels={"✉ 의견 보내기","☕ 개발자 응원하기","개인정보처리방침"};for(int k=0;k<3;k++){final int index=k;TextView link=text(footerLabels[k],11);link.setPadding(dp(4),dp(8),dp(4),dp(8));link.setOnClickListener(v->footerAction(index));footer.addView(link);}add(l,footer);TextView version=text("월급이 자란다 💵 · v2.30",10);version.setGravity(Gravity.CENTER);version.setTextColor(0xff70D9A4);add(l,version);
  organizeSettings(l,scroll);
  ticker=new Runnable(){public void run(){int mode=prefs.getInt("display_mode",0);long target=mode==2?prefs.getLong("net_salary_amount",prefs.getLong("net",2200000)):prefs.getLong("salary_amount",prefs.getLong("net",2500000));LocalDateTime now=LocalDateTime.now();int days=YearMonth.from(now).lengthOfMonth();double f=SalaryFeatures.fraction(prefs,now);periodText.setText(SalaryFeatures.periodLabel(prefs,now.toLocalDate()));if(ddayText!=null){ddayText.setText(ddayOn.isChecked()?SalaryFeatures.dday(prefs,now.toLocalDate()):"");ddayText.setVisibility(ddayOn.isChecked()?View.VISIBLE:View.GONE);}preview.setText(NumberFormat.getIntegerInstance(Locale.KOREA).format((long)(target*f))+"원");boolean rainbow=SalaryFeatures.isPeriodEnd(prefs,now.toLocalDate());preview.getPaint().setShader(rainbow?new android.graphics.LinearGradient(0,0,Math.max(dp(240),preview.getWidth()),0,new int[]{0xffff4545,0xffff9e3c,0xffffe34d,0xff55d66d,0xff52a6ff,0xff6a65d9,0xffc36fe9},null,android.graphics.Shader.TileMode.CLAMP):null);preview.invalidate();previewPercent.setText(String.format(Locale.KOREA,"%.2f%%",f*100));progressStyle(SalaryFeatures.daysUntilPeriodEnd(prefs,now.toLocalDate())<=4);appProgress.setProgress((int)Math.round(f*10000));if(widgetPreview!=null&&now.getSecond()%5==0)updateWidgetPreview();handler.postDelayed(this,1000);}};handler.post(ticker);
  }
@@ -179,12 +194,23 @@ public class MainActivity extends Activity {
    insuranceHeading.addView(forward,new LinearLayout.LayoutParams(-2,dp(48)));
    int index=main.indexOfChild(insuranceHeader);main.removeView(insuranceHeader);
    LinearLayout.LayoutParams sectionLp=new LinearLayout.LayoutParams(-1,-2);sectionLp.topMargin=dp(24);main.addView(insuranceHeading,index,sectionLp);
+   // Separate salary inputs from the insurance category with a subtle 1dp rule.
+   sectionDividerBefore(main,insuranceHeading,24,12);
+   // The salary subpage uses the same rule between pay amount and pay period.
+   View salaryPeriod=findText(salaryPage,"급여 산정 기간");
+   sectionDividerBefore(salaryPage,salaryPeriod,18,14);
+   // Keep controls visibly distinct without adding extra cards.
+   setBottomGap(salaryPage,parentRowDeep(salaryPage,payType),12);
+   setBottomGap(salaryPage,parentRowDeep(salaryPage,hourlyRate),14);
+   setBottomGap(salaryPage,parentRowDeep(salaryPage,annualSalary),14);
+   View periodRowView=parentRowDeep(salaryPage,periodStartButton);
+   setBottomGap(salaryPage,periodRowView,16);
    Runnable openSalary=()->{main.setVisibility(View.GONE);salaryPage.setVisibility(View.VISIBLE);scroll.post(()->scroll.scrollTo(0,0));};
    forward.setOnClickListener(v->openSalary.run());headingText.setOnClickListener(v->openSalary.run());
    salaryBack.setOnClickListener(v->{saveButton.performClick();if(!saveSucceeded)return;salaryPage.setVisibility(View.GONE);main.setVisibility(View.VISIBLE);scroll.post(()->scroll.scrollTo(0,0));});
    // Hourly-only work schedule lives behind a second right-arrow.
    TextView workForward=text("근무 조건 설정  ›",15);workForward.setGravity(Gravity.CENTER_VERTICAL);workForward.setPadding(dp(12),dp(15),dp(12),dp(15));workForward.setBackground(roundedBox(FIELD,LINE));
-   salaryPage.addView(workForward,new LinearLayout.LayoutParams(-1,-2));
+   LinearLayout.LayoutParams workForwardLp=new LinearLayout.LayoutParams(-1,-2);workForwardLp.topMargin=dp(16);salaryPage.addView(workForward,workForwardLp);
    TextView workBack=text("‹  저장하고 돌아가기",15);workBack.setPadding(0,dp(14),0,dp(16));add(workPage,workBack);
    section(workPage,"근무 조건 설정");
    TextView daysLabel=label("근무 요일");add(workPage,daysLabel);
