@@ -4,11 +4,21 @@ public class SalaryFeatures {
  static double hours(LocalTime a,LocalTime b,int rest){int m=(int)Duration.between(a,b).toMinutes();if(m<=0)m+=1440;return Math.max(0,m-rest)/60.0;}
  static double monthWorkHours(SharedPreferences p,CheckBox[] days,String start,String end,int rest){try{YearMonth ym=YearMonth.now();double daily=hours(LocalTime.parse(start),LocalTime.parse(end),rest);double total=0;for(int d=1;d<=ym.lengthOfMonth();d++){int day=ym.atDay(d).getDayOfWeek().getValue()-1;if(days[day].isChecked())total+=daily;}return total;}catch(Exception e){return 0;}}
  static LocalDate clamp(YearMonth ym,int day){return ym.atDay(day==0?ym.lengthOfMonth():Math.min(day,ym.lengthOfMonth()));}
- static LocalDate[] period(SharedPreferences p,LocalDate date){int startDay=Math.max(1,Math.min(31,p.getInt("period_start_day",1)));int endDay=Math.max(0,Math.min(31,p.getInt("period_end_day",0)));
-  YearMonth ym=YearMonth.from(date);LocalDate start=clamp(ym,startDay);if(start.isAfter(date)){ym=ym.minusMonths(1);start=clamp(ym,startDay);}
-  LocalDate end=clamp(ym,endDay);if(end.isBefore(start))end=clamp(ym.plusMonths(1),endDay);
-  if(date.isAfter(end)){ym=ym.plusMonths(1);start=clamp(ym,startDay);end=clamp(ym,endDay);if(end.isBefore(start))end=clamp(ym.plusMonths(1),endDay);}
-  return new LocalDate[]{start,end};}
+ static LocalDate[] period(SharedPreferences p,LocalDate date){
+  int startDay=Math.max(0,Math.min(31,p.getInt("period_start_day",1)));
+  int endDay=Math.max(0,Math.min(31,p.getInt("period_end_day",0)));
+  YearMonth ym=YearMonth.from(date);
+  LocalDate start=clamp(ym,startDay);
+  if(start.isAfter(date)){ym=ym.minusMonths(1);start=clamp(ym,startDay);}
+  LocalDate end=clamp(ym,endDay);
+  if(!end.isAfter(start))end=clamp(ym.plusMonths(1),endDay);
+  if(date.isAfter(end)){
+   ym=ym.plusMonths(1);start=clamp(ym,startDay);
+   end=clamp(ym,endDay);
+   if(!end.isAfter(start))end=clamp(ym.plusMonths(1),endDay);
+  }
+  return new LocalDate[]{start,end};
+ }
  public static double fraction(SharedPreferences p,LocalDateTime now){LocalDate[] dates=period(p,now.toLocalDate());LocalDateTime start=dates[0].atStartOfDay();LocalDateTime finish=dates[1].plusDays(1).atStartOfDay();return Math.max(0,Math.min(1,(double)Duration.between(start,now).toMillis()/Duration.between(start,finish).toMillis()));}
  static boolean isPeriodEnd(SharedPreferences p,LocalDate date){return period(p,date)[1].equals(date);}
  static long daysUntilPeriodEnd(SharedPreferences p,LocalDate date){return ChronoUnit.DAYS.between(date,period(p,date)[1]);}
