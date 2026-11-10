@@ -19,6 +19,28 @@ public class SalaryFeatures {
   }
   return new LocalDate[]{start,end};
  }
+ static LocalDate[] periodWithDays(int startDay,int endDay,LocalDate date){
+  // Same calendar-period rules as period(SharedPreferences,...).
+  YearMonth ym=YearMonth.from(date);LocalDate start=clamp(ym,startDay);
+  if(start.isAfter(date)){ym=ym.minusMonths(1);start=clamp(ym,startDay);}
+  LocalDate end=clamp(ym,endDay);
+  if(!end.isAfter(start))end=clamp(ym.plusMonths(1),endDay);
+  if(date.isAfter(end)){ym=ym.plusMonths(1);start=clamp(ym,startDay);end=clamp(ym,endDay);if(!end.isAfter(start))end=clamp(ym.plusMonths(1),endDay);}
+  return new LocalDate[]{start,end};
+ }
+ static double workHours(LocalDate start,LocalDate end,double weeklyHours,boolean[] days){
+  int count=0;for(boolean selected:days)if(selected)count++;
+  if(count==0)return 0;
+  double daily=weeklyHours/count;double total=0;
+  for(LocalDate d=start;!d.isAfter(end);d=d.plusDays(1))if(days[d.getDayOfWeek().getValue()-1])total+=daily;
+  return total;
+ }
+ static long hourlyGross(SharedPreferences p,LocalDate date){
+  int mask=p.getInt("work_days_mask",31);boolean[] days=new boolean[7];
+  for(int i=0;i<7;i++)days[i]=(mask&(1<<i))!=0;
+  LocalDate[] range=period(p,date);
+  return Math.round(p.getLong("hourly_rate",11000)*workHours(range[0],range[1],p.getInt("weekly_work_hours",40),days));
+ }
  public static double fraction(SharedPreferences p,LocalDateTime now){LocalDate[] dates=period(p,now.toLocalDate());LocalDateTime start=dates[0].atStartOfDay();LocalDateTime finish=dates[1].plusDays(1).atStartOfDay();return Math.max(0,Math.min(1,(double)Duration.between(start,now).toMillis()/Duration.between(start,finish).toMillis()));}
  static boolean isPeriodEnd(SharedPreferences p,LocalDate date){return period(p,date)[1].equals(date);}
  static long daysUntilPeriodEnd(SharedPreferences p,LocalDate date){return ChronoUnit.DAYS.between(date,period(p,date)[1]);}
