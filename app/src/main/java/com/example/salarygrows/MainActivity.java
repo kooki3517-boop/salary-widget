@@ -171,7 +171,7 @@ public class MainActivity extends Activity {
   View annualRow=parentRowDeep(main,annualSalary),hourlyRow=parentRowDeep(main,hourlyRate);
   View scheduleHeader=findTextDeep(main,"근무 일정 (근무시간 적립용)");
   View daysRow=parentRowDeep(main,workDays[0]),startRow=parentRowDeep(main,startHour),endRow=parentRowDeep(main,endHour),breakRow=parentRowDeep(main,breakMinutes);
-  View scheduleNote=workNote;
+  View scheduleNote=findTextDeep(main,"※ 시급제 예상 월급은 선택한 근무 요일·시간을 기준으로 계산하며, 주휴수당·상여금·초과근무수당은 포함하지 않습니다.");
   Runnable visibility=()->{
    int t=payType.getSelectedItemPosition();
    if(monthlySalaryRow!=null)monthlySalaryRow.setVisibility(t==0?View.VISIBLE:View.GONE);
