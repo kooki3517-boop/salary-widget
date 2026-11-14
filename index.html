@@ -1,0 +1,165 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#2F2937"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><title>타로 카드</title><style>
+:root{--ink:#291c31;--deep:#3b2947;--purple:#704e7d;--mauve:#a7799f;--pink:#d6a7b8;--cream:#f0d7c5}*{box-sizing:border-box}body{margin:0;background:#1d1425;color:var(--ink);font-family:monospace;image-rendering:pixelated}.app{max-width:430px;min-height:100dvh;margin:auto;background:var(--purple);position:relative;padding-bottom:74px}.top{height:54px;background:var(--deep);color:var(--cream);display:flex;align-items:center;justify-content:center;border-bottom:5px solid var(--ink);font-weight:bold}.sound{position:absolute;right:13px;top:11px;background:var(--cream);border:3px solid var(--ink);padding:5px 8px}.scene{min-height:350px;padding:18px;background:#3b2947 url("kami-lost-found.webp") center center / cover no-repeat;image-rendering:pixelated;border-bottom:5px solid var(--ink)}.window{height:115px;width:145px;margin:0 auto 15px;background:#2a203d;border:7px solid #3b2947;box-shadow:inset 0 0 0 3px #b28bb2;position:relative}.moon{width:38px;height:38px;border-radius:50%;background:var(--cream);position:absolute;right:18px;top:16px}.moon:after{content:'';width:31px;height:31px;border-radius:50%;background:#2a203d;position:absolute;left:10px;top:-4px}.cat{position:absolute;left:24px;bottom:0;width:43px;height:52px;background:#17131b;border-radius:45% 45% 20% 20%}.cat:before,.cat:after{content:'';position:absolute;top:-11px;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:18px solid #17131b}.cat:before{left:0}.cat:after{right:0}.shelf{height:76px;border:6px solid var(--deep);background:#9d718e;display:flex;align-items:end;justify-content:center;gap:12px;padding:8px}.bottle{width:23px;border:4px solid var(--ink);background:var(--pink);height:39px}.bottle:nth-child(2){height:52px;background:#b89aca}.bottle:nth-child(3){height:34px;background:#d8b7a5}.crystal{width:55px;height:55px;border-radius:50%;background:#c6a7cf;border:5px solid var(--ink);margin:-10px auto 5px;box-shadow:0 9px 0 #4d3657}.panel{background:var(--cream);border:5px solid var(--ink);margin:14px;padding:14px;box-shadow:6px 6px 0 #3c2945}.panel h2{text-align:center;margin:2px 0 12px}.q,textarea{width:100%;border:4px solid var(--ink);background:#f7e8dc;padding:11px;font:inherit;color:var(--ink);resize:vertical}.q{min-height:44px}.deck{width:104px;height:146px;margin:18px auto;background:#412f50;border:7px double var(--cream);box-shadow:6px 6px 0 var(--ink);display:flex;align-items:center;justify-content:center;color:var(--cream);font-size:42px}.deck.cardface{width:190px;height:326px;padding:0;background:#17131b;overflow:hidden}.deck.cardface img.reversed{transform:rotate(180deg)}.deck.cardface img{width:100%;height:100%;object-fit:cover;display:block;image-rendering:auto}.btn{display:block;width:78%;margin:13px auto;background:var(--pink);border:5px solid var(--ink);box-shadow:4px 4px 0 var(--deep);padding:12px;font:700 16px monospace;color:var(--ink)}.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--deep)}.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(430px,100%);height:70px;background:var(--deep);display:flex;border-top:5px solid var(--ink);z-index:5}.nav button{flex:1;background:none;border:0;color:var(--cream);font:bold 14px monospace}.nav button+button{border-left:3px solid #7e6089}.hidden{display:none}.cardtitle{text-align:center;font-size:19px}.orient{text-align:center;color:#6d4778}.records .item{border:4px solid var(--ink);background:#efd8c8;margin:10px 0;padding:10px}.tiny{font-size:12px;opacity:.75}.backup{display:flex;gap:8px}.backup .btn{width:50%;font-size:12px;margin:5px 0}.popup{position:fixed;inset:0;background:#1d1425bb;display:flex;align-items:center;justify-content:center;z-index:20}.popbox{width:min(330px,86vw);background:var(--cream);border:6px solid var(--ink);box-shadow:9px 9px 0 #6f4c79;padding:25px;text-align:center}.popbox b{font-size:23px}.pixelstars{text-align:center;color:#ead0df;letter-spacing:8px;margin:5px}.empty{text-align:center;padding:30px 5px}.file{display:none}
+
+/* Unified underground lost-and-found styling — visual only */
+:root{--ink:#22222e;--deep:#262633;--purple:#343441;--mauve:#75646b;--pink:#c7a49a;--cream:#d4b6a4}
+body{background:#1c1c26;color:#292633}
+.app{background:#30303c}
+.top{background:#292934;color:#d8b2a2;border-bottom:3px solid #1c1d28;letter-spacing:.2px}
+.sound{background:#d2afa0;border:3px solid #25232b;color:#26232c}
+.scene{height:auto;min-height:0;aspect-ratio:888 / 855;padding:0;background:#262632 url("kami-lost-found.webp") center center / 100% 100% no-repeat;border-bottom:0;image-rendering:pixelated}
+#home{background:#2c2b37;padding-bottom:18px}
+#home .panel{background:#66565d;border:4px solid #26232e;box-shadow:none;margin:0 14px 14px;padding:18px 14px 20px;color:#e2b9aa;position:relative}
+#home .panel h2{color:#e7bdad;font-size:19px;margin:4px 0 16px}
+#home textarea{background:#dfbcab;border:4px solid #292734;color:#34303a;box-shadow:none;border-radius:0}
+#home textarea::placeholder{color:#806e71}
+#home .deck{background:#363341;border-color:#c8a69c;box-shadow:4px 4px 0 #26242f}
+#home .btn{background:#bd9b91;color:#2a2832;border:4px solid #272630;box-shadow:4px 4px 0 #24232d}
+.nav{background:#292834;border-top:4px solid #24222d}
+.nav button{color:#d8b2a2}
+.nav button+button{border-left:2px solid #4a414b}
+/* Shared panels remain usable and legible throughout the app */
+#result .panel,#records .panel{background:#d1b4a5;border-color:#292734;box-shadow:5px 5px 0 #22222c}
+#result textarea,#records textarea{background:#ead1c3;border-color:#292734}
+#result .btn,#records .btn{background:#c49e94;border-color:#292734;color:#292734;box-shadow:4px 4px 0 #292734}
+.records .item{background:#e1c6b6;border-color:#292734}
+.popbox{background:#d2b6a5;border-color:#292734;box-shadow:8px 8px 0 #292734}
+@media(max-width:380px){#home .panel h2{font-size:17px}}
+
+
+/* Keep save confirmation on a single line on mobile */
+.popbox .save-confirm-line{font-size:clamp(11px,3.4vw,14px);white-space:nowrap;letter-spacing:-.06em;margin:12px -8px}
+
+/* Worn lost-and-found handover stamp */
+.popbox .handover-title{display:block;font-size:clamp(10px,2.9vw,12px);font-weight:700;white-space:nowrap;letter-spacing:-.075em;margin:2px -13px 0}
+.popbox .handover-subtitle{font-size:14px;line-height:1.5;margin:12px 0 7px}
+.popbox .paw-stamp{display:block;width:49px;height:49px;margin:2px auto 14px;transform:rotate(-9deg);opacity:.84;filter:contrast(.92)}
+
+/* Home heading: centered, smaller and lighter */
+#home .panel h2{font-size:14px;font-weight:500;line-height:1.6;letter-spacing:-.045em;text-align:center;word-break:keep-all;margin:4px 0 14px;}
+
+/* Delete only the selected saved record */
+.records .record-delete{display:block;margin:10px 0 0 auto;padding:5px 12px;background:#d1b4a5;border:2px solid #292734;color:#292734;font:12px monospace;cursor:pointer}
+/* Requested: tarot card 10% smaller; result text slightly more compact */
+#result .deck.cardface{width:171px;height:293px;margin:14px auto 12px}
+#result .cardtitle{font-size:18px;line-height:1.35;margin:8px 0}
+#result #meaning{font-size:15px;line-height:1.45;margin:10px 0}
+.records .record-meaning{margin:12px 0;padding:10px;border-left:3px solid #77616b;background:#ead1c3;line-height:1.55;font-size:13px}.records .record-meaning b{display:block;margin-bottom:5px}.records .record-meaning span{white-space:pre-wrap}
+/* Minimal 1990s vault scene; retain the established layout and functionality */
+.top{height:39px;justify-content:flex-end;border-bottom:0;background:#302b39}
+.sound{top:4px;right:11px}
+.scene{display:block;box-sizing:border-box;width:100%;height:auto;min-height:0;aspect-ratio:449 / 245;padding:0;background:#302936 url("kami-lost-found.webp") center / 100% 100% no-repeat;border-bottom:0;image-rendering:pixelated}
+#home .panel{margin-top:12px}
+#home .panel h2{font-size:14px;line-height:1.65;font-weight:normal;margin:2px 0 14px}
+#home #question{min-height:85px;width:100%;display:block}
+
+/* Result screen: match the visual scale of the home screen (mobile only). */
+#result .panel{margin:12px 14px 16px;padding:12px 14px 14px;}
+#result .deck.cardface{width:135px;height:233px;margin:8px auto 12px;border-width:5px;box-shadow:4px 4px 0 var(--ink);}
+#result .cardtitle{font-size:14px;line-height:1.35;margin:6px 0 5px;overflow-wrap:anywhere;}
+#result .orient{font-size:11px;line-height:1.4;margin:4px 0 7px;}
+#result #meaning{font-size:13px;line-height:1.5;margin:8px 0 10px;word-break:keep-all;}
+#result .panel hr{margin:12px 0;}
+#result .panel p:has(> b){font-size:13px;line-height:1.5;margin:12px 0 9px;}
+#result #reflection{min-height:75px;height:84px;max-height:180px;font-size:13px;line-height:1.55;padding:10px;}
+#result .btn{margin-top:12px;}
+
+/* Compact result actions: half the previous button width and visual height. */
+#result #save,#result #again{width:42.9%;min-width:0;padding:6px 3px;font-size:13px;line-height:1.35;margin:12px auto 0;border-width:3px;box-shadow:3px 3px 0 #292734;white-space:nowrap;}
+/* Brief, translucent, angular red check on successful record save. */
+.save-check-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;pointer-events:none;background:transparent;animation:save-check-fade 1.35s ease-in-out both;}
+.save-check-overlay svg{width:40vw;max-width:172px;height:auto;overflow:visible;filter:drop-shadow(3px 4px 0 rgba(42,30,42,.16));}
+@keyframes save-check-fade{0%{opacity:0;transform:scale(.93)}15%{opacity:1;transform:scale(1)}72%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.025)}}
+@media(prefers-reduced-motion:reduce){.save-check-overlay{animation:none;opacity:1}}
+
+/* Match the illustration background; compact sound toggle only. */
+.top{background:#2f2937}
+.sound{width:28px;height:28px;top:5px;right:11px;padding:0;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;border-width:2px}
+
+/* 2026-11-05: result card enlargement and pen-drawn save confirmation */
+#result .deck.cardface{width:160px;height:276px;max-width:calc(100vw - 88px);margin:10px auto 12px}
+.save-check-overlay{animation:save-check-ink-fade 1.65s ease-in-out both}
+.save-check-overlay .ink-path{stroke-dasharray:165;stroke-dashoffset:165;animation:save-check-write .78s cubic-bezier(.35,.03,.58,1) .13s forwards}
+@keyframes save-check-write{to{stroke-dashoffset:0}}
+@keyframes save-check-ink-fade{0%{opacity:0}12%{opacity:1}73%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.save-check-overlay{animation:none;opacity:1}.save-check-overlay .ink-path{animation:none;stroke-dashoffset:0}}
+/* Compact music toggle: 30% smaller than previous 28px */
+.sound{width:20px!important;height:20px!important;top:7px!important;right:13px!important;padding:0!important;font-size:11px!important;border-width:2px!important;line-height:1!important}
+/* Faster hand-drawn check, with a short visible finish */
+.save-check-overlay{animation:save-check-ink-fade-fast 1.12s ease-in-out both!important}
+.save-check-overlay .ink-path{animation:save-check-write-fast .43s cubic-bezier(.38,.03,.6,1) .07s forwards!important}
+@keyframes save-check-write-fast{to{stroke-dashoffset:0}}
+@keyframes save-check-ink-fade-fast{0%{opacity:0}9%{opacity:1}68%{opacity:1}100%{opacity:0}}
+</style></head><body><main class="app"><header class="top"><button id="sound" class="sound">♪</button></header>
+<section id="home"><div class="scene"></div><div class="panel"><h2>어쩌면 이미 답은 정해져 있을지도 모릅니다.</h2><textarea id="question" rows="3" placeholder="궁금한 것을 적어도 되고, 비워도 괜찮아요."></textarea><div id="deck" class="deck">☾</div><button id="draw" class="btn">카드 열기</button></div></section>
+<section id="result" class="hidden"><div class="panel"><div class="deck cardface" id="face"><img id="cardimg" alt="뽑은 타로 카드"></div><h2 id="ct" class="cardtitle"></h2><div id="or" class="orient"></div><p id="meaning"></p><hr><p><b>이 카드를 보고 어떤 생각이 들었나요?</b></p><textarea id="reflection" rows="8" placeholder="마음에 떠오른 걸 자유롭게 적어주세요."></textarea><button id="save" class="btn">기록하기</button><button id="again" class="btn">한 장 더 뽑기</button></div></section>
+<section id="records" class="hidden records"><div class="panel"><h2>마음 기록</h2><div id="list"></div><hr><div class="backup"><button id="export" class="btn">기록 백업하기</button><button id="importBtn" class="btn">기록 불러오기</button><input id="importFile" class="file" type="file" accept="application/json"></div><p class="tiny">백업 파일에는 질문·카드·정/역방향·기록·날짜가 함께 저장돼요.</p></div></section>
+<nav class="nav"><button id="recordsNav">▣ 기록</button><button id="homeNav">⌂ 홈</button></nav></main>
+<audio id="click" src="click.wav" preload="auto"></audio>
+<script>
+let cards=[],current=null,soundOn=true;const $=s=>document.querySelector(s),click=$('#click');fetch('cards.json?v=20261104-restore-meaning').then(r=>r.json()).then(x=>{cards=x;if(!$('#records').classList.contains('hidden'))render()});if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+let lastClickAt=0;
+function clicky(){
+  if(!soundOn)return;
+  const now=performance.now();
+  if(now-lastClickAt<280)return;
+  lastClickAt=now;
+  click.pause();click.currentTime=0;
+  click.play().catch(()=>{});
+}
+document.addEventListener('click',e=>{if(e.target.closest('button'))clicky()});
+// Web Audio buffer playback avoids HTMLMediaElement media-session UI on many browsers.
+// System-level notification behavior is ultimately controlled by the OS/browser.
+let bgmCtx=null, bgmBuffers=null, bgmNodes=[], bgmLoading=null, bgmToken=0;
+function getBgmContext(){
+  if(!bgmCtx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;bgmCtx=new AC()}
+  return bgmCtx;
+}
+function preloadBgm(){
+  const ctx=getBgmContext();if(!ctx)return Promise.reject(new Error('Web Audio unavailable'));
+  if(!bgmLoading)bgmLoading=Promise.all(['bgm.wav','rail-ambience.wav'].map(async url=>{
+    const r=await fetch(url);if(!r.ok)throw Error('Audio loading failed');
+    return ctx.decodeAudioData(await r.arrayBuffer());
+  })).then(buffers=>(bgmBuffers=buffers)).catch(e=>{bgmLoading=null;throw e});
+  return bgmLoading;
+}
+function stopBgm(){
+  ++bgmToken;
+  for(const n of bgmNodes){try{n.stop()}catch(e){}try{n.disconnect()}catch(e){}}
+  bgmNodes=[];
+}
+function startBgm(){
+  if(!soundOn||document.hidden||bgmNodes.length)return;
+  const ctx=getBgmContext();if(!ctx)return;
+  const token=++bgmToken;
+  // Resume directly inside the user gesture; decoding can finish afterward.
+  ctx.resume().catch(()=>{});
+  preloadBgm().then(()=>{
+    if(token!==bgmToken||!soundOn||document.hidden||bgmNodes.length||ctx.state!=='running')return;
+    bgmBuffers.forEach((buffer,i)=>{
+      const source=ctx.createBufferSource(),gain=ctx.createGain();
+      source.buffer=buffer;source.loop=true;gain.gain.value=i===0?.32:.13;
+      source.connect(gain);gain.connect(ctx.destination);source.start();bgmNodes.push(source);
+    });
+  }).catch(()=>{});
+}
+function unlockSound(){if(soundOn)startBgm()}
+preloadBgm().catch(()=>{});
+window.addEventListener('DOMContentLoaded',startBgm,{once:true});
+window.addEventListener('load',startBgm,{once:true});
+for(const type of ['pointerdown','touchstart','click','keydown'])document.addEventListener(type,unlockSound,{capture:true,passive:true});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopBgm();else if(soundOn)startBgm()});
+window.addEventListener('pagehide',stopBgm);
+window.addEventListener('pageshow',()=>{if(soundOn)startBgm()});
+$('#sound').onclick=()=>{soundOn=!soundOn;$('#sound').textContent=soundOn?'♪':'×';if(soundOn)startBgm();else stopBgm()};
+function cardCode(name){const major=['The Fool','The Magician','The High Priestess','The Empress','The Emperor','The Hierophant','The Lovers','The Chariot','Strength','The Hermit','Wheel of Fortune','Justice','The Hanged Man','Death','Temperance','The Devil','The Tower','The Star','The Moon','The Sun','Judgement','The World'];let i=major.indexOf(name);if(i>=0)return 'ar'+String(i).padStart(2,'0');const suits={Wands:'wa',Cups:'cu',Swords:'sw',Pentacles:'pe'};for(const [suit,prefix] of Object.entries(suits)){if(name.endsWith(' of '+suit)){const rank=name.slice(0,-(' of '+suit).length),ranks={Ace:1,Two:2,Three:3,Four:4,Five:5,Six:6,Seven:7,Eight:8,Nine:9,Ten:10,Page:11,Knight:12,Queen:13,King:14};return prefix+String(ranks[rank]).padStart(2,'0')}}return 'ar00'}
+function show(id){['home','result','records'].forEach(x=>$('#'+x).classList.toggle('hidden',x!==id));if(id==='records')render()}
+function secureRandomInt(max){if(!Number.isSafeInteger(max)||max<1||max>4294967296)throw new RangeError('Invalid random range');const range=4294967296,limit=Math.floor(range/max)*max,buf=new Uint32Array(1);do{crypto.getRandomValues(buf)}while(buf[0]>=limit);return buf[0]%max}
+$('#draw').onclick=()=>{if(!cards.length)return;let choice=secureRandomInt(cards.length*2);let c=cards[Math.floor(choice/2)],rev=(choice%2===1);current={...c,rev,q:$('#question').value.trim()};$('#ct').textContent=c.en+' · '+c.ko;$('#or').textContent=rev?'역방향 REVERSED':'정방향 UPRIGHT';$('#meaning').textContent=(rev?c.r:c.u);const code=cardCode(c.en);const img=$('#cardimg');img.style.display='block';img.alt='';img.classList.toggle('reversed',rev);let sources=['https://raw.githubusercontent.com/sixseeds/tarot-api/main/cards/'+code+'.jpg','https://cdn.jsdelivr.net/gh/sixseeds/tarot-api@main/cards/'+code+'.jpg','https://petaloverflow.github.io/tarot-api/cards/'+code+'.jpg'];let si=0;img.onerror=()=>{si++;if(si<sources.length){img.src=sources[si]}else{img.onerror=null;img.style.display='none'}};img.src=sources[0];$('#face').style.transform='none';$('#reflection').value='';show('result')};
+$('#save').onclick=()=>{if(!current||document.querySelector('.save-check-overlay'))return;let arr=JSON.parse(localStorage.getItem('boriRecords')||'[]');arr.unshift({...current,text:$('#reflection').value,at:new Date().toISOString()});localStorage.setItem('boriRecords',JSON.stringify(arr));const overlay=document.createElement('div');overlay.className='save-check-overlay';overlay.setAttribute('role','status');overlay.setAttribute('aria-label','기록 완료');overlay.innerHTML='<svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path class="ink-path" d="M24 82 L63 119 L138 38" fill="none" stroke="rgba(166,46,51,.76)" stroke-width="17" stroke-linecap="square" stroke-linejoin="miter"/></svg>';document.body.append(overlay);if(soundOn){try{const pen=new Audio('pen-stroke.wav');pen.volume=.35;pen.play().catch(()=>{});}catch(e){}}setTimeout(()=>{overlay.remove();show('home')},1120)};
+$('#again').onclick=()=>show('home');$('#homeNav').onclick=()=>show('home');$('#recordsNav').onclick=()=>show('records');
+function render(){let a=JSON.parse(localStorage.getItem('boriRecords')||'[]'),l=$('#list');if(!a.length){l.innerHTML='<div class="empty">아직 보관된 마음이 없어요.</div>';return}l.innerHTML=a.map((x,i)=>{const original=cards.find(c=>String(c.en).trim().toLowerCase()===String(x.en||'').trim().toLowerCase()),meaning=(x.rev?(x.r||original?.r):(x.u||original?.u))||'';return `<div class="item"><b>${new Date(x.at).toLocaleString('ko-KR')}</b><br>${esc(String(x.en||''))} · ${esc(String(x.ko||''))} / ${x.rev?'역방향':'정방향'}${x.q?`<p>Q. ${esc(String(x.q))}</p>`:''}${meaning?`<p class="record-meaning"><b>카드 해석</b><span>${esc(String(meaning))}</span></p>`:''}${x.text?`<p>${esc(String(x.text))}</p>`:''}<button type="button" class="record-delete" data-index="${i}">삭제</button></div>`}).join('')}
+$('#list').addEventListener('click',e=>{const btn=e.target.closest('.record-delete');if(!btn)return;const index=Number(btn.dataset.index);if(!Number.isInteger(index)||!confirm('이 마음 기록을 삭제하시겠어요?'))return;const records=JSON.parse(localStorage.getItem('boriRecords')||'[]');if(index<0||index>=records.length)return;records.splice(index,1);localStorage.setItem('boriRecords',JSON.stringify(records));render()});
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+$('#export').onclick=()=>{let data=localStorage.getItem('boriRecords')||'[]',blob=new Blob([data],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='보리의마음상점_백업.json';a.click();URL.revokeObjectURL(a.href)};$('#importBtn').onclick=()=>$('#importFile').click();$('#importFile').onchange=async e=>{try{let t=await e.target.files[0].text(),j=JSON.parse(t);if(!Array.isArray(j))throw 0;localStorage.setItem('boriRecords',JSON.stringify(j));render();alert('기록을 불러왔어요.')}catch{alert('올바른 백업 파일이 아니에요.')}};
+</script></body></html>

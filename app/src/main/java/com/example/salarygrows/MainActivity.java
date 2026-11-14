@@ -320,30 +320,25 @@ public class MainActivity extends Activity {
  Spinner spinner(String[] options,int index){Spinner sp=new Spinner(this);ArrayAdapter<String> ad=new ArrayAdapter<>(this,R.layout.spinner_item_soft,options);ad.setDropDownViewResource(R.layout.spinner_dropdown_soft);sp.setAdapter(ad);styleSpinner(sp);sp.setSelection(Math.max(0,Math.min(index,options.length-1)));return sp;}
  EditText plainField(String val){EditText e=new EditText(this);e.setText(val);e.setTextColor(SOFT_TEXT);e.setSingleLine(true);styleField(e);return e;}
  void footerAction(int which){
-  if(which!=0){new AlertDialog.Builder(this).setTitle("개인정보처리방침").setPositiveButton("닫기",null).show();return;}
+  if(which!=0){Intent privacyIntent=new Intent(Intent.ACTION_VIEW,Uri.parse("https://kooki3517-boop.github.io/salary-widget/privacy-policy.html"));try{startActivity(privacyIntent);}catch(Exception e){Toast.makeText(this,"개인정보처리방침 페이지를 열 수 없어",Toast.LENGTH_SHORT).show();}return;}
   LinearLayout content=new LinearLayout(this);content.setOrientation(LinearLayout.VERTICAL);content.setGravity(Gravity.CENTER_HORIZONTAL);content.setPadding(dp(16),dp(20),dp(16),dp(12));
   ImageView avatar=new ImageView(this);avatar.setImageResource(R.drawable.developer_profile);avatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
   LinearLayout.LayoutParams avatarLp=new LinearLayout.LayoutParams(dp(156),dp(156));avatarLp.gravity=Gravity.CENTER_HORIZONTAL;avatarLp.bottomMargin=dp(14);content.addView(avatar,avatarLp);
   TextView insta=text("@tsukiwotabetayoru",14);insta.setTextColor(0xff4D7CFF);insta.setPaintFlags(insta.getPaintFlags()|android.graphics.Paint.UNDERLINE_TEXT_FLAG);insta.setGravity(Gravity.CENTER);insta.setPadding(0,dp(4),0,dp(10));insta.setOnClickListener(v->{Intent i=new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.instagram.com/tsukiwotabetayoru?vrfl=YmQ4ZHJnb3kzaGNm"));try{startActivity(i);}catch(Exception ignored){}});content.addView(insta);
   View topLine=new View(this);topLine.setBackgroundColor(0xff626262);LinearLayout.LayoutParams lineLp=new LinearLayout.LayoutParams(-1,dp(1));lineLp.topMargin=dp(6);lineLp.bottomMargin=dp(18);content.addView(topLine,lineLp);
   String[] paragraphs={
-   "안녕하세요. 감사합니다. 개발자 전혜나입니다.",
-   "저는 백화점에서 일하고 있습니다. 시향지를 나눠드리다가 손님이 뜸한 틈에 짬짬이 수정하며 만들어 본 앱이 여기까지 왔네요.",
-   "긴말을 늘어놓는 것도 식상하겠지요?",
+   "안녕하세요. 개발자 전혜나입니다.",
+   "저는 백화점에서 일하고 있습니다. 시향지를 나눠드리다가 손님이 뜸한 틈에 짬짬이 수정하며 만들어 본 앱이 여기까지 왔네요.\n긴말을 늘어놓는 것도 식상하겠지요?",
    "저는 일이 힘들 때마다 위젯에 조금씩 쌓여가는 월급을 보며 작게나마 위안을 얻곤 합니다.\n여러분도 그랬으면 좋겠다는 마음에 25,000원을 들여 스토어에 앱을 등록하고 배포했습니다.",
-   "다들 고생이 많습니다. 다들 잘하고 있습니다.",
-   "우리는 하루 종일 전력을 다하고 있습니다. 그것만으로도 충분히 숭고하고 대단한 일이지만,\n그런 하루가 이틀이 되고 사흘이 되고, 한 달이 되고 일 년이 되면 지치지 않을 수가 없습니다.\n단거리를 달릴 때 사용해야 할 전력을 우리는 장거리를 달리며 쏟아붓고 있으니까요.",
-   "그런데 주위를 둘러보면 모두 비슷하게 살아가고 있으니, 힘들다는 말조차 쉽게 꺼내지 못합니다. 오히려 그 무게를 버거워하는 자신이 나약한 건 아닐까 자책하기도 하지요.",
-   "저는 그게 참 안타깝습니다.",
-   "이미 최선을 다하고 있는 사람들이, 자신이 부족해서 힘든 거라고 생각하는 현실이요.\n물론 저 역시 늘 같은 번뇌 속에서 살아갑니다.",
-   "그런 마음을 조금이라도 덜어내려고 이런 앱도 만들어 보고,  글도 남기는 것 같습니다.",
+   "다들 고생이 많습니다. 다들 잘하고 있습니다.\n하루 종일 전력을 다하고 있고 그것은 충분히 숭고하고 대단한 일이지만,\n그런 하루가 이틀이 되고, 사흘이 되고, 한 달이 되고 일 년이 되면 지치지 않을 수가 없습니다.\n단거리를 달릴 때 사용해야 할 전력을 우리는 장거리를 달리며 쏟아붓고 있으니까요..",
+   "그런데 주위를 둘러보면 모두 비슷하게 살아가고 있으니, 힘들다는 말조차 쉽게 꺼내지 못합니다.\n오히려 그 무게를 버거워하는 자신이 나약한 건 아닐까 자책하기도 하지요.\n저는 그게 참 안타깝습니다.\n이미 최선을 다하고 있는 사람들이, 자신이 부족해서 힘든 거라고 생각하는 현실이요.\n물론 저 역시 늘 같은 번뇌 속에서 살아갑니다.",
+   "그런 마음을 조금이라도 덜어내려고 이런 앱도 만들어 보고, 글도 남기는 것 같습니다.",
    "다들 잘하고 있습니다. 모두 다 괜찮습니다.\n너무 자신을 몰아세우지 않았으면 좋겠습니다.",
    "오늘 하루도 무탈하시길 바랍니다!"};
   for(String paragraph:paragraphs)developerParagraph(content,paragraph,14);
   View divider=new View(this);divider.setBackgroundColor(0xff707070);LinearLayout.LayoutParams dividerLp=new LinearLayout.LayoutParams(-1,dp(1));dividerLp.topMargin=dp(14);dividerLp.bottomMargin=dp(22);content.addView(divider,dividerLp);
-  developerParagraph(content,"* 건의 사항 및 질문은 인스타그램 DM 요청으로 부탁드립니다.",14);
-  developerParagraph(content,"* 마지막으로 저에게도 작은 즐거움 하나 만들어 주시겠어요?\n위젯에 조금씩 쌓이는 월급을 보며 힘을 얻는 것처럼, 제 통장에도 여러분의 이름이 하나둘 쌓이면 좋겠습니다.\n일하다가 잠깐씩 알림을 열어 보고, 낯선 이름들을 발견하면서 오늘은 이분들과 함께라는 생각이 들면 기쁠 것 같습니다.\n메시지나 메일보다 빠르고 편하면서, 사생활이 공유되지 않는 방식이\n의외로 계좌번호밖에 없길래 후원 요구처럼 보이는 방식이 채택 되었네요 😅",14);
-  developerParagraph(content,"딱 '1원'만 남겨주세요, 여러분의 이름이 제 하루의 자산입니다!",14);
+  developerParagraph(content,"• 건의 사항 및 질문은 인스타그램 DM 요청으로 부탁드립니다.\n• 마지막으로 저에게도 작은 즐거움 하나 만들어 주시겠어요? 위젯에 조금씩 쌓이는 월급을 보며 힘을 얻는 것처럼, \n• 딱 '1원'만 남겨주세요, 제 통장에도 여러분의 이름이 하나둘 쌓이면 좋겠습니다.\n일하다가 잠깐씩 알림을 열었을 때, 낯선 이름들을 발견하면 동료들의 토닥임처럼 힘이 날 것 같습니다.",14);
+  developerParagraph(content,"메시지나 메일보다 빠르고 편하면서, 사생활이 공유되지 않는 방식이 의외로 계좌번호밖에 없길래 후원 요구처럼 보이는 방식이 채택 되었네요 😅\n여러분의 이름이 제 하루의 자산입니다.",14);
   LinearLayout accountRow=new LinearLayout(this);accountRow.setGravity(Gravity.CENTER);accountRow.setOrientation(LinearLayout.HORIZONTAL);
   TextView account=text("카카오뱅크 3333011457979 전혜나",14);account.setGravity(Gravity.CENTER);accountRow.addView(account,new LinearLayout.LayoutParams(0,-2,1));
   TextView copy=text("▢",19);copy.setContentDescription("계좌번호 복사");copy.setGravity(Gravity.CENTER);copy.setPadding(dp(6),dp(8),dp(6),dp(8));copy.setOnClickListener(v->{android.content.ClipboardManager cb=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);cb.setPrimaryClip(ClipData.newPlainText("계좌번호","3333011457979"));Toast.makeText(this,"계좌번호가 복사됐어",Toast.LENGTH_SHORT).show();});accountRow.addView(copy);
