@@ -337,7 +337,7 @@ public class MainActivity extends Activity {
    "오늘 하루도 무탈하시길 바랍니다!"};
   for(String paragraph:paragraphs)developerParagraph(content,paragraph,14);
   View divider=new View(this);divider.setBackgroundColor(0xff707070);LinearLayout.LayoutParams dividerLp=new LinearLayout.LayoutParams(-1,dp(1));dividerLp.topMargin=dp(14);dividerLp.bottomMargin=dp(22);content.addView(divider,dividerLp);
-  developerParagraph(content,"• 건의 사항 및 질문은 인스타그램 DM 요청으로 부탁드립니다.\n• 마지막으로 저에게도 작은 즐거움 하나 만들어 주시겠어요? 위젯에 조금씩 쌓이는 월급을 보며 힘을 얻는 것처럼, \n• 딱 '1원'만 남겨주세요, 제 통장에도 여러분의 이름이 하나둘 쌓이면 좋겠습니다.\n일하다가 잠깐씩 알림을 열었을 때, 낯선 이름들을 발견하면 동료들의 토닥임처럼 힘이 날 것 같습니다.",14);
+  developerParagraph(content,"• 건의 사항 및 질문은 인스타그램 DM 요청으로 부탁드립니다.\n• 마지막으로 저에게도 작은 즐거움 하나 만들어 주시겠어요? 위젯에 조금씩 쌓이는 월급을 보며 힘을 얻는 것처럼,\n• 딱 '1원'만 남겨주세요, 제 통장에도 여러분의 이름이 하나둘 쌓이면 좋겠습니다.\n일하다가 잠깐씩 알림을 열었을 때, 낯선 이름들을 발견하면 동료들의 토닥임처럼 힘이 날 것 같습니다.",14);
   developerParagraph(content,"메시지나 메일보다 빠르고 편하면서, 사생활이 공유되지 않는 방식이 의외로 계좌번호밖에 없길래 후원 요구처럼 보이는 방식이 채택 되었네요 😅\n여러분의 이름이 제 하루의 자산입니다.",14);
   LinearLayout accountRow=new LinearLayout(this);accountRow.setGravity(Gravity.CENTER);accountRow.setOrientation(LinearLayout.HORIZONTAL);
   TextView account=text("카카오뱅크 3333011457979 전혜나",14);account.setGravity(Gravity.CENTER);accountRow.addView(account,new LinearLayout.LayoutParams(0,-2,1));
