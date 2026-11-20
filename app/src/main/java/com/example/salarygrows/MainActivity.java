@@ -328,25 +328,25 @@ public class MainActivity extends Activity {
   View topLine=new View(this);topLine.setBackgroundColor(0xff626262);LinearLayout.LayoutParams lineLp=new LinearLayout.LayoutParams(-1,dp(1));lineLp.topMargin=dp(6);lineLp.bottomMargin=dp(18);content.addView(topLine,lineLp);
   String[] paragraphs={
    "안녕하세요. 개발자 전혜나입니다.",
-   "저는 백화점에서 일하고 있습니다. 시향지를 나눠드리다가 손님이 뜸한 틈에 짬짬이 수정하며 만들어 본 앱이 여기까지 왔네요.",
+   "저는 백화점에서 일하고 있습니다. 시향지를 나눠드리다 손님이 뜸한 틈에 짬짬이 수정하며 만들어 본 앱이 여기까지 왔네요.",
    "긴말을 늘어놓는 것도 식상하겠지요?",
    "저는 일이 힘들 때마다 위젯에 조금씩 쌓여가는 월급을 보며 작게나마 위안을 얻곤 합니다.\n여러분도 그랬으면 좋겠다는 마음에 25,000원을 들여 스토어에 앱을 등록하고 배포했습니다.",
    "다들 고생이 많습니다. 다들 잘하고 있습니다.",
    "하루 종일 전력을 다하고 있고 그것은 충분히 숭고하고 대단한 일이지만,\n그런 하루가 이틀이 되고, 사흘이 되고, 한 달이 되고 일 년이 되면 지치지 않을 수가 없습니다.\n단거리를 달릴 때 사용해야 할 전력을 우리는 장거리를 달리며 쏟아붓고 있으니까요..",
-   "그런데 주위를 둘러보면 모두 비슷하게 살아가고 있으니, 힘들다는 말조차 쉽게 꺼내지 못합니다.\n오히려 그 무게를 버거워하는 자신이 나약한 건 아닐까 자책하기도 하지요.",
+   "그런데 주위를 둘러보면 모두 비슷하게 살아가고 있으니, 힘들다는 말조차도 쉽게 꺼내지를 못합니다.\n오히려 그 무게를 버거워하는 자신이 나약한 건 아닐까 자책하기도 하지요..",
    "저는 그게 참 안타깝습니다.",
-   "이미 최선을 다하고 있는 사람들이, 자신이 부족해서 힘든 거라고 생각하는 현실이요.\n물론 저 역시 늘 같은 번뇌 속에서 살아갑니다.",
-   "그런 마음을 조금이라도 덜어내려고 이런 앱도 만들어 보고, 글도 남기는 것 같습니다.",
+   "이미 최선을 다하고 있는 사람들이, 자신이 부족해서 힘든 거라고 생각하는 현실이요.\n저 역시 늘 같은 번뇌 속에서 살아갑니다.",
+   "그런 마음을 조금이라도 덜어내려 이런 앱도 만들어 보고, 이렇게 글도 남기는 것 같습니다.",
    "다들 잘하고 있습니다. 모두 다 괜찮습니다.\n너무 자신을 몰아세우지 않으셨으면 좋겠어요.",
    "오늘 하루도 무탈하시길 바랍니다!"};
   for(String paragraph:paragraphs)developerParagraph(content,paragraph,14);
   View divider=new View(this);divider.setBackgroundColor(0xff707070);LinearLayout.LayoutParams dividerLp=new LinearLayout.LayoutParams(-1,dp(1));dividerLp.topMargin=dp(14);dividerLp.bottomMargin=dp(22);content.addView(divider,dividerLp);
   developerParagraph(content,"*건의 사항 및 질문은 인스타그램 DM 요청으로 부탁드립니다.",14);
-  developerParagraph(content,"* 마지막으로 저에게도 작은 즐거움 하나 만들어 주시겠어요? 위젯에 조금씩 쌓이는 월급을 보며 힘을 얻는 것처럼,\n딱 '1원'만 남겨주세요, 제 통장에도 여러분의 이름이 하나둘 쌓이면 좋겠습니다.\n일하다가 잠깐씩 알림을 열었을 때, 낯선 이름들을 발견하면 동료의 어깨 토닥임처럼 힘이 날 것 같습니다.\n여러분의 이름이 제 하루의 자산입니다.",14);
+  developerParagraph(content,"* 마지막으로 저에게도 작은 즐거움 하나 만들어 주시겠어요? \n딱 '1원'만 남겨주세요, 제 통장에 여러분의 이름이 하나둘 쌓이면 좋겠습니다.\n일하다가 잠깐씩 알림을 열었을 때, 낯선 이름들을 발견하면 동료의 토닥임처럼 힘이 날 것 같습니다.\n제가 위젯에 조금씩 쌓이는 월급을 보며 힘을 얻는 것처럼요.\n여러분의 이름이 제 하루의 자산입니다. 감사합니다.",14);
   LinearLayout accountRow=new LinearLayout(this);accountRow.setGravity(Gravity.CENTER);accountRow.setOrientation(LinearLayout.HORIZONTAL);
   TextView account=text("카카오뱅크 3333011457979 전혜나",14);account.setGravity(Gravity.CENTER);accountRow.addView(account,new LinearLayout.LayoutParams(0,-2,1));
-  View copy=new View(this){android.graphics.Paint p=new android.graphics.Paint(3);protected void onDraw(android.graphics.Canvas c){super.onDraw(c);p.setColor(0xff42658D);p.setStyle(android.graphics.Paint.Style.STROKE);p.setStrokeWidth(dp(2));float r=dp(2);c.drawRoundRect(dp(10),dp(6),dp(25),dp(22),r,r,p);c.drawRoundRect(dp(5),dp(11),dp(20),dp(27),r,r,p);}};
-  copy.setContentDescription("계좌번호 복사");copy.setClickable(true);copy.setOnClickListener(v->{android.content.ClipboardManager cb=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);cb.setPrimaryClip(ClipData.newPlainText("계좌번호","3333011457979"));Toast.makeText(this,"계좌번호가 복사됐어",Toast.LENGTH_SHORT).show();});accountRow.addView(copy,new LinearLayout.LayoutParams(dp(34),dp(34)));
+  View copy=new View(this){android.graphics.Paint p=new android.graphics.Paint(3);protected void onDraw(android.graphics.Canvas c){super.onDraw(c);p.setColor(0xff42658D);p.setStyle(android.graphics.Paint.Style.STROKE);p.setStrokeWidth(dp(2));float r=dp(2);c.drawRoundRect(dp(9),dp(5),dp(21),dp(18),r,r,p);c.drawRoundRect(dp(5),dp(9),dp(17),dp(22),r,r,p);}};
+  copy.setContentDescription("계좌번호 복사");copy.setClickable(true);copy.setOnClickListener(v->{android.content.ClipboardManager cb=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);cb.setPrimaryClip(ClipData.newPlainText("계좌번호","3333011457979"));Toast.makeText(this,"계좌번호가 복사됐어",Toast.LENGTH_SHORT).show();});accountRow.addView(copy,new LinearLayout.LayoutParams(dp(28),dp(28)));
   LinearLayout.LayoutParams accountLp=new LinearLayout.LayoutParams(-1,-2);accountLp.topMargin=dp(3);accountLp.bottomMargin=dp(22);content.addView(accountRow,accountLp);
   ScrollView scroller=new ScrollView(this);scroller.setFillViewport(false);scroller.addView(content);
   AlertDialog dialog=new AlertDialog.Builder(this).setView(scroller).create();
