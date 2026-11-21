@@ -360,12 +360,12 @@ public class MainActivity extends Activity {
   for(String paragraph:paragraphs)developerParagraph(content,paragraph,14);
   View divider=new View(this);divider.setBackgroundColor(0xff707070);LinearLayout.LayoutParams dividerLp=new LinearLayout.LayoutParams(-1,dp(1));dividerLp.topMargin=dp(14);dividerLp.bottomMargin=dp(22);content.addView(divider,dividerLp);
   developerParagraph(content,"*건의 사항 및 질문은 인스타그램 DM 요청으로 부탁드립니다.",14);
-  developerParagraph(content,"* 마지막으로 저에게도 작은 즐거움 하나 만들어 주시겠어요? \n딱 '1원'만 남겨주세요, 제 통장에 여러분의 이름이 하나둘씩 쌓이면 좋겠습니다.\n일하다 잠깐 알림이 왔을 때, 낯선 이름들을 발견하면 동료의 토닥임처럼 힘이 날 것 같습니다.\n제가 위젯에 조금씩 쌓이는 월급을 보며 힘을 얻는 것처럼요..",14);
+  developerParagraph(content,"* 마지막으로 저에게도 작은 즐거움 하나 만들어 주시겠어요? \n딱 '1원'만 남겨주세요, 제 통장에 여러분의 이름이 하나둘씩 쌓이면 좋겠습니다.\n일하다 잠깐 알림이 왔을 때, 낯선 이름들을 발견하면 동료의 토닥임처럼 힘이 날 것 같습니다.\n제가 위젯에 조금씩 쌓이는 월급을 보며 힘을 얻는 것처럼요.",14);
   developerParagraph(content,"여러분의 이름이 제 하루의 자산입니다. 감사합니다!",14);
   LinearLayout accountRow=new LinearLayout(this);accountRow.setGravity(Gravity.CENTER);accountRow.setOrientation(LinearLayout.HORIZONTAL);
-  TextView account=text("카카오뱅크 3333011457979 전혜나",14);account.setGravity(Gravity.CENTER);accountRow.addView(account,new LinearLayout.LayoutParams(0,-2,1));
-  View copy=new View(this){android.graphics.Paint p=new android.graphics.Paint(3);protected void onDraw(android.graphics.Canvas c){super.onDraw(c);p.setColor(0xff24466F);p.setStyle(android.graphics.Paint.Style.STROKE);p.setStrokeWidth(dp(2));float r=dp(2);c.drawRoundRect(dp(8),dp(4),dp(19),dp(16),r,r,p);c.drawRoundRect(dp(4),dp(8),dp(15),dp(20),r,r,p);}};
-  copy.setContentDescription("계좌번호 복사");copy.setClickable(true);copy.setOnClickListener(v->{android.content.ClipboardManager cb=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);cb.setPrimaryClip(ClipData.newPlainText("계좌번호","3333011457979"));Toast.makeText(this,"계좌번호가 복사됐어",Toast.LENGTH_SHORT).show();});accountRow.addView(copy,new LinearLayout.LayoutParams(dp(24),dp(24)));
+  TextView account=text("카카오뱅크 3333011457979 전혜나",14);account.setGravity(Gravity.CENTER);accountRow.addView(account,new LinearLayout.LayoutParams(-2,-2));
+  View copy=new View(this){android.graphics.Paint p=new android.graphics.Paint(3);protected void onDraw(android.graphics.Canvas c){super.onDraw(c);p.setColor(0xff1463C8);p.setStyle(android.graphics.Paint.Style.STROKE);p.setStrokeWidth(dp(2.5f));float r=dp(2);c.drawRoundRect(dp(8),dp(4),dp(19),dp(16),r,r,p);c.drawRoundRect(dp(4),dp(8),dp(15),dp(20),r,r,p);}};
+  copy.setContentDescription("계좌번호 복사");copy.setClickable(true);copy.setOnClickListener(v->{android.content.ClipboardManager cb=(android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);cb.setPrimaryClip(ClipData.newPlainText("계좌번호","3333011457979"));Toast.makeText(this,"계좌번호가 복사됐어",Toast.LENGTH_SHORT).show();});LinearLayout.LayoutParams copyLp=new LinearLayout.LayoutParams(dp(24),dp(24));copyLp.leftMargin=dp(3);accountRow.addView(copy,copyLp);
   LinearLayout.LayoutParams accountLp=new LinearLayout.LayoutParams(-1,-2);accountLp.topMargin=dp(3);accountLp.bottomMargin=dp(22);content.addView(accountRow,accountLp);
   ScrollView scroller=new ScrollView(this);scroller.setFillViewport(false);scroller.addView(content);
   AlertDialog dialog=new AlertDialog.Builder(this).setView(scroller).create();
